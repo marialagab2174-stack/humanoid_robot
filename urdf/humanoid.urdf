@@ -5,33 +5,35 @@
   <material name="white"><color rgba="1 1 1 1"/></material>
   <material name="dark"><color rgba="0.1 0.1 0.1 1"/></material>
 
-  <!-- BASE -->
   <link name="base_link">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/chest.dae" scale="0.001 0.001 0.001"/>
       </geometry>
+      <material name="grey"/>
     </visual>
   </link>
 
-  <!-- HEAD -->
   <link name="head">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/head.dae" scale="0.001 0.001 0.001"/>
       </geometry>
+      <material name="white"/>
     </visual>
   </link>
 
   <joint name="head_joint" type="fixed">
     <parent link="base_link"/>
     <child link="head"/>
-    <origin xyz="0 0 0.18"/>
+    <origin xyz="0 0 0.16"/>
   </joint>
 
-  <!-- LEFT ARM -->
   <link name="l_arm">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/l_upper_arm.dae" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -41,12 +43,12 @@
   <joint name="l_arm_j" type="fixed">
     <parent link="base_link"/>
     <child link="l_arm"/>
-    <origin xyz="0 0.12 0.12"/>
+    <origin xyz="0 0.06 0.10"/>
   </joint>
 
-  <!-- LEFT FOREARM -->
   <link name="l_forearm">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <box size="0.03 0.03 0.15"/>
       </geometry>
@@ -57,12 +59,12 @@
   <joint name="l_forearm_j" type="fixed">
     <parent link="l_arm"/>
     <child link="l_forearm"/>
-    <origin xyz="0 0 -0.15"/>
+    <origin xyz="0 0 -0.10"/>
   </joint>
 
-  <!-- LEFT HAND -->
   <link name="l_hand">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <box size="0.04 0.02 0.08"/>
       </geometry>
@@ -73,12 +75,12 @@
   <joint name="l_hand_j" type="fixed">
     <parent link="l_forearm"/>
     <child link="l_hand"/>
-    <origin xyz="0 0 -0.12"/>
+    <origin xyz="0 0 -0.10"/>
   </joint>
 
-  <!-- RIGHT ARM -->
   <link name="r_arm">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 -1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/r_upper_arm.dae" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -88,12 +90,12 @@
   <joint name="r_arm_j" type="fixed">
     <parent link="base_link"/>
     <child link="r_arm"/>
-    <origin xyz="0 -0.12 0.12"/>
+    <origin xyz="0 -0.06 0.10"/>
   </joint>
 
-  <!-- RIGHT FOREARM -->
   <link name="r_forearm">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 -1.57"/>
       <geometry>
         <box size="0.03 0.03 0.15"/>
       </geometry>
@@ -104,12 +106,12 @@
   <joint name="r_forearm_j" type="fixed">
     <parent link="r_arm"/>
     <child link="r_forearm"/>
-    <origin xyz="0 0 -0.15"/>
+    <origin xyz="0 0 -0.10"/>
   </joint>
 
-  <!-- RIGHT HAND -->
   <link name="r_hand">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 -1.57"/>
       <geometry>
         <box size="0.04 0.02 0.08"/>
       </geometry>
@@ -120,12 +122,12 @@
   <joint name="r_hand_j" type="fixed">
     <parent link="r_forearm"/>
     <child link="r_hand"/>
-    <origin xyz="0 0 -0.12"/>
+    <origin xyz="0 0 -0.10"/>
   </joint>
 
-  <!-- LEFT LEG -->
   <link name="l_leg">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/l_upper_leg.dae" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -135,11 +137,12 @@
   <joint name="l_leg_j" type="fixed">
     <parent link="base_link"/>
     <child link="l_leg"/>
-    <origin xyz="0 0.05 -0.2"/>
+    <origin xyz="0 0.04 -0.05"/>
   </joint>
 
   <link name="l_lower_leg">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/l_lower_leg.dae" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -149,11 +152,12 @@
   <joint name="l_lower_leg_j" type="fixed">
     <parent link="l_leg"/>
     <child link="l_lower_leg"/>
-    <origin xyz="0 0 -0.25"/>
+    <origin xyz="0 0 -0.18"/>
   </joint>
 
   <link name="l_foot">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/l_foot.dae" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -163,12 +167,12 @@
   <joint name="l_foot_j" type="fixed">
     <parent link="l_lower_leg"/>
     <child link="l_foot"/>
-    <origin xyz="0 0 -0.2"/>
+    <origin xyz="0 0 -0.15"/>
   </joint>
 
-  <!-- RIGHT LEG -->
   <link name="r_leg">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/r_upper_leg.dae" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -178,11 +182,12 @@
   <joint name="r_leg_j" type="fixed">
     <parent link="base_link"/>
     <child link="r_leg"/>
-    <origin xyz="0 -0.05 -0.2"/>
+    <origin xyz="0 -0.04 -0.05"/>
   </joint>
 
   <link name="r_lower_leg">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/r_lower_leg.dae" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -192,11 +197,12 @@
   <joint name="r_lower_leg_j" type="fixed">
     <parent link="r_leg"/>
     <child link="r_lower_leg"/>
-    <origin xyz="0 0 -0.25"/>
+    <origin xyz="0 0 -0.18"/>
   </joint>
 
   <link name="r_foot">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
         <mesh filename="package://humanoid_robot/meshes/r_foot.dae" scale="0.001 0.001 0.001"/>
       </geometry>
@@ -206,7 +212,7 @@
   <joint name="r_foot_j" type="fixed">
     <parent link="r_lower_leg"/>
     <child link="r_foot"/>
-    <origin xyz="0 0 -0.2"/>
+    <origin xyz="0 0 -0.15"/>
   </joint>
 
 </robot>
