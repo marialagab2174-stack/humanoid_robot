@@ -1,13 +1,92 @@
 <?xml version="1.0"?>
-<robot name="humanoid">
+<robot name="humanoid_robot">
+
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.2 0.2 0.5"/>
+        <box size="0.2 0.3 0.4"/>
       </geometry>
       <material name="blue">
         <color rgba="0 0 1 1"/>
       </material>
     </visual>
   </link>
+
+  <link name="head">
+    <visual>
+      <geometry>
+        <sphere radius="0.1"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="neck_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="head"/>
+    <origin xyz="0 0 0.3" rpy="0 0 0"/>
+  </joint>
+
+  <link name="right_arm">
+    <visual>
+      <geometry>
+        <cylinder length="0.3" radius="0.04"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="right_shoulder_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_arm"/>
+    <origin xyz="0 -0.2 0.1" rpy="0 0 0"/>
+  </joint>
+
+  <link name="left_arm">
+    <visual>
+      <geometry>
+        <cylinder length="0.3" radius="0.04"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="left_shoulder_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_arm"/>
+    <origin xyz="0 0.2 0.1" rpy="0 0 0"/>
+  </joint>
+
+  <link name="right_leg">
+    <visual>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="right_hip_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_leg"/>
+    <origin xyz="0 -0.1 -0.4" rpy="0 0 0"/>
+  </joint>
+
+  <link name="left_leg">
+    <visual>
+      <geometry>
+        <cylinder length="0.4" radius="0.05"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="left_hip_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_leg"/>
+    <origin xyz="0 0.1 -0.4" rpy="0 0 0"/>
+  </joint>
+
 </robot>
