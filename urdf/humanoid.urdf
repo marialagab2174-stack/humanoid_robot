@@ -1,0 +1,867 @@
+<?xml version="1.0"?>
+<robot name="iCub">
+
+  <!-- ═══════════════════════════════════════════
+       MATÉRIAUX
+  ═══════════════════════════════════════════ -->
+  <material name="grey">  <color rgba="0.5 0.5 0.5 1"/></material>
+  <material name="white"> <color rgba="1 1 1 1"/></material>
+  <material name="dark">  <color rgba="0.1 0.1 0.1 1"/></material>
+  <material name="skin">  <color rgba="0.96 0.80 0.69 1"/></material>
+  <material name="black"> <color rgba="0.05 0.05 0.05 1"/></material>
+
+  <!-- ═══════════════════════════════════════════
+       TORSE / BASE
+  ═══════════════════════════════════════════ -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/chest.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.04"/>
+      <geometry><box size="0.12 0.08 0.16"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="3.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.008"/>
+    </inertial>
+  </link>
+
+  <!-- Plastron avant du torse -->
+  <link name="bb_chest_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/bb_chest.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="dark"/>
+    </visual>
+  </link>
+  <joint name="bb_chest_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="bb_chest_link"/>
+    <origin xyz="0 0 0.085"/>
+  </joint>
+
+  <!-- ═══════════════════════════════════════════
+       COU ET TÊTE
+  ═══════════════════════════════════════════ -->
+  <link name="neck">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/neck_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.015"/>
+      <geometry><cylinder radius="0.025" length="0.03"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="neck_joint" type="fixed">
+    <parent link="bb_chest_link"/>
+    <child link="neck"/>
+    <origin xyz="-0.005 0 0.02"/>
+  </joint>
+
+  <link name="neck_2">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/neck_2.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="dark"/>
+    </visual>
+  </link>
+  <joint name="neck_2_joint" type="fixed">
+    <parent link="neck"/>
+    <child link="neck_2"/>
+    <origin xyz="0 0 0.03"/>
+  </joint>
+
+  <link name="head">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/head.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.04"/>
+      <geometry><sphere radius="0.09"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.8"/>
+      <inertia ixx="0.002" ixy="0" ixz="0" iyy="0.002" iyz="0" izz="0.002"/>
+    </inertial>
+  </link>
+  <joint name="head_joint" type="fixed">
+    <parent link="neck_2"/>
+    <child link="head"/>
+    <origin xyz="0 0 0.02"/>
+  </joint>
+
+  <!-- Œil gauche -->
+  <link name="l_eye">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry><sphere radius="0.012"/></geometry>
+      <material name="black"/>
+    </visual>
+    <inertial>
+      <mass value="0.02"/>
+      <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+    </inertial>
+  </link>
+  <joint name="l_eye_joint" type="fixed">
+    <parent link="head"/>
+    <child link="l_eye"/>
+    <origin xyz="0.07 0.033 0.055"/>
+  </joint>
+
+  <!-- Œil droit -->
+  <link name="r_eye">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry><sphere radius="0.012"/></geometry>
+      <material name="black"/>
+    </visual>
+    <inertial>
+      <mass value="0.02"/>
+      <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+    </inertial>
+  </link>
+  <joint name="r_eye_joint" type="fixed">
+    <parent link="head"/>
+    <child link="r_eye"/>
+    <origin xyz="0.07 -0.033 0.055"/>
+  </joint>
+
+  <!-- Caméra / imu fictive dans la tête (frame de capteur) -->
+  <link name="head_imu_frame"/>
+  <joint name="head_imu_joint" type="fixed">
+    <parent link="head"/>
+    <child link="head_imu_frame"/>
+    <origin xyz="0 0 0.04"/>
+  </joint>
+
+  <!-- ═══════════════════════════════════════════
+       ÉPAULE GAUCHE → BRAS → AVANT-BRAS → POIGNET → MAIN
+  ═══════════════════════════════════════════ -->
+  <link name="l_shoulder">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/l_shoulder_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.03"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <inertia ixx="0.0002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0002"/>
+    </inertial>
+  </link>
+  <joint name="l_shoulder_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="l_shoulder"/>
+    <origin xyz="0 0.04 0.08"/>
+  </joint>
+
+  <link name="l_arm">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/l_upper_arm.dae" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.05"/>
+      <geometry><cylinder radius="0.025" length="0.10"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0005" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="l_arm_j" type="fixed">
+    <parent link="l_shoulder"/>
+    <child link="l_arm"/>
+    <origin xyz="0 0.06 0"/>
+  </joint>
+
+  <link name="l_arm_cover">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/torso_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="l_arm_cover_joint" type="fixed">
+    <parent link="l_arm"/>
+    <child link="l_arm_cover"/>
+    <origin xyz="0 0 -0.02"/>
+  </joint>
+
+  <link name="l_arm_back_cover">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 -1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/torso_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="l_arm_back_cover_joint" type="fixed">
+    <parent link="l_arm"/>
+    <child link="l_arm_back_cover"/>
+    <origin xyz="0 0 0.025"/>
+  </joint>
+
+  <link name="l_forearm">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/l_elbow_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.05"/>
+      <geometry><cylinder radius="0.022" length="0.10"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.35"/>
+      <inertia ixx="0.0003" ixy="0" ixz="0" iyy="0.0003" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="l_forearm_j" type="fixed">
+    <parent link="l_arm"/>
+    <child link="l_forearm"/>
+    <origin xyz="0 0.01 -0.10"/>
+  </joint>
+
+  <!-- Poignet gauche (nouveau) -->
+  <link name="l_wrist">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry><sphere radius="0.018"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.018"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.08"/>
+      <inertia ixx="0.00002" ixy="0" ixz="0" iyy="0.00002" iyz="0" izz="0.00002"/>
+    </inertial>
+  </link>
+  <joint name="l_wrist_joint" type="fixed">
+    <parent link="l_forearm"/>
+    <child link="l_wrist"/>
+    <origin xyz="0 0 -0.095"/>
+  </joint>
+
+  <!-- Main gauche (nouveau) -->
+  <link name="l_hand">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/l_hand.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="skin"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.04"/>
+      <geometry><box size="0.07 0.03 0.08"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.18"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.00005"/>
+    </inertial>
+  </link>
+  <joint name="l_hand_joint" type="fixed">
+    <parent link="l_wrist"/>
+    <child link="l_hand"/>
+    <origin xyz="0 0 -0.02"/>
+  </joint>
+
+  <!-- Doigts gauches (version simplifiée : 5 chaînes) -->
+  <!-- INDEX -->
+  <link name="l_index_proximal">
+    <visual><origin xyz="0 0 -0.018"/><geometry><cylinder radius="0.007" length="0.036"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.008"/><inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/></inertial>
+  </link>
+  <joint name="l_index_proximal_j" type="fixed">
+    <parent link="l_hand"/>
+    <child link="l_index_proximal"/>
+    <origin xyz="0.012 0.02 -0.075"/>
+  </joint>
+  <link name="l_index_distal">
+    <visual><origin xyz="0 0 -0.014"/><geometry><cylinder radius="0.006" length="0.028"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.005"/><inertia ixx="0.0000005" ixy="0" ixz="0" iyy="0.0000005" iyz="0" izz="0.0000005"/></inertial>
+  </link>
+  <joint name="l_index_distal_j" type="fixed">
+    <parent link="l_index_proximal"/>
+    <child link="l_index_distal"/>
+    <origin xyz="0 0 -0.038"/>
+  </joint>
+
+  <!-- MAJEUR -->
+  <link name="l_middle_proximal">
+    <visual><origin xyz="0 0 -0.019"/><geometry><cylinder radius="0.007" length="0.038"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.008"/><inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/></inertial>
+  </link>
+  <joint name="l_middle_proximal_j" type="fixed">
+    <parent link="l_hand"/>
+    <child link="l_middle_proximal"/>
+    <origin xyz="0.004 0.02 -0.075"/>
+  </joint>
+  <link name="l_middle_distal">
+    <visual><origin xyz="0 0 -0.015"/><geometry><cylinder radius="0.006" length="0.030"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.005"/><inertia ixx="0.0000005" ixy="0" ixz="0" iyy="0.0000005" iyz="0" izz="0.0000005"/></inertial>
+  </link>
+  <joint name="l_middle_distal_j" type="fixed">
+    <parent link="l_middle_proximal"/>
+    <child link="l_middle_distal"/>
+    <origin xyz="0 0 -0.040"/>
+  </joint>
+
+  <!-- ANNULAIRE -->
+  <link name="l_ring_proximal">
+    <visual><origin xyz="0 0 -0.017"/><geometry><cylinder radius="0.006" length="0.034"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.007"/><inertia ixx="0.0000008" ixy="0" ixz="0" iyy="0.0000008" iyz="0" izz="0.0000008"/></inertial>
+  </link>
+  <joint name="l_ring_proximal_j" type="fixed">
+    <parent link="l_hand"/>
+    <child link="l_ring_proximal"/>
+    <origin xyz="-0.004 0.02 -0.073"/>
+  </joint>
+  <link name="l_ring_distal">
+    <visual><origin xyz="0 0 -0.013"/><geometry><cylinder radius="0.005" length="0.026"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.004"/><inertia ixx="0.0000003" ixy="0" ixz="0" iyy="0.0000003" iyz="0" izz="0.0000003"/></inertial>
+  </link>
+  <joint name="l_ring_distal_j" type="fixed">
+    <parent link="l_ring_proximal"/>
+    <child link="l_ring_distal"/>
+    <origin xyz="0 0 -0.036"/>
+  </joint>
+
+  <!-- AURICULAIRE -->
+  <link name="l_pinky_proximal">
+    <visual><origin xyz="0 0 -0.013"/><geometry><cylinder radius="0.005" length="0.026"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.005"/><inertia ixx="0.0000005" ixy="0" ixz="0" iyy="0.0000005" iyz="0" izz="0.0000005"/></inertial>
+  </link>
+  <joint name="l_pinky_proximal_j" type="fixed">
+    <parent link="l_hand"/>
+    <child link="l_pinky_proximal"/>
+    <origin xyz="-0.012 0.018 -0.065"/>
+  </joint>
+  <link name="l_pinky_distal">
+    <visual><origin xyz="0 0 -0.010"/><geometry><cylinder radius="0.004" length="0.020"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.003"/><inertia ixx="0.0000002" ixy="0" ixz="0" iyy="0.0000002" iyz="0" izz="0.0000002"/></inertial>
+  </link>
+  <joint name="l_pinky_distal_j" type="fixed">
+    <parent link="l_pinky_proximal"/>
+    <child link="l_pinky_distal"/>
+    <origin xyz="0 0 -0.028"/>
+  </joint>
+
+  <!-- POUCE -->
+  <link name="l_thumb_proximal">
+    <visual><origin xyz="0 0 -0.016"/><geometry><cylinder radius="0.008" length="0.032"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.010"/><inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/></inertial>
+  </link>
+  <joint name="l_thumb_proximal_j" type="fixed">
+    <parent link="l_hand"/>
+    <child link="l_thumb_proximal"/>
+    <origin xyz="0.025 0.005 -0.040" rpy="0 0.5 0"/>
+  </joint>
+  <link name="l_thumb_distal">
+    <visual><origin xyz="0 0 -0.012"/><geometry><cylinder radius="0.007" length="0.024"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.007"/><inertia ixx="0.0000008" ixy="0" ixz="0" iyy="0.0000008" iyz="0" izz="0.0000008"/></inertial>
+  </link>
+  <joint name="l_thumb_distal_j" type="fixed">
+    <parent link="l_thumb_proximal"/>
+    <child link="l_thumb_distal"/>
+    <origin xyz="0 0 -0.034"/>
+  </joint>
+
+  <!-- ═══════════════════════════════════════════
+       ÉPAULE DROITE → BRAS → AVANT-BRAS → POIGNET → MAIN
+  ═══════════════════════════════════════════ -->
+  <link name="r_shoulder">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 -1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/r_shoulder_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.03"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <inertia ixx="0.0002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0002"/>
+    </inertial>
+  </link>
+  <joint name="r_shoulder_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="r_shoulder"/>
+    <origin xyz="0 -0.04 0.08"/>
+  </joint>
+
+  <link name="r_arm">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 -1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/r_upper_arm.dae" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.05"/>
+      <geometry><cylinder radius="0.025" length="0.10"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0005" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="r_arm_j" type="fixed">
+    <parent link="r_shoulder"/>
+    <child link="r_arm"/>
+    <origin xyz="0 -0.06 0"/>
+  </joint>
+
+  <link name="r_arm_cover">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 -1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/torso_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="r_arm_cover_joint" type="fixed">
+    <parent link="r_arm"/>
+    <child link="r_arm_cover"/>
+    <origin xyz="0 0 -0.02"/>
+  </joint>
+
+  <link name="r_arm_back_cover">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/torso_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="r_arm_back_cover_joint" type="fixed">
+    <parent link="r_arm"/>
+    <child link="r_arm_back_cover"/>
+    <origin xyz="0 0 0.025"/>
+  </joint>
+
+  <link name="r_forearm">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 -1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/r_elbow_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.05"/>
+      <geometry><cylinder radius="0.022" length="0.10"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.35"/>
+      <inertia ixx="0.0003" ixy="0" ixz="0" iyy="0.0003" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="r_forearm_j" type="fixed">
+    <parent link="r_arm"/>
+    <child link="r_forearm"/>
+    <origin xyz="0 -0.01 -0.10"/>
+  </joint>
+
+  <!-- Poignet droit (nouveau) -->
+  <link name="r_wrist">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry><sphere radius="0.018"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.018"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.08"/>
+      <inertia ixx="0.00002" ixy="0" ixz="0" iyy="0.00002" iyz="0" izz="0.00002"/>
+    </inertial>
+  </link>
+  <joint name="r_wrist_joint" type="fixed">
+    <parent link="r_forearm"/>
+    <child link="r_wrist"/>
+    <origin xyz="0 0 -0.095"/>
+  </joint>
+
+  <!-- Main droite (nouveau) -->
+  <link name="r_hand">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 -1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/r_hand.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="skin"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.04"/>
+      <geometry><box size="0.07 0.03 0.08"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.18"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.00005"/>
+    </inertial>
+  </link>
+  <joint name="r_hand_joint" type="fixed">
+    <parent link="r_wrist"/>
+    <child link="r_hand"/>
+    <origin xyz="0 0 -0.02"/>
+  </joint>
+
+  <!-- Doigts droits -->
+  <link name="r_index_proximal">
+    <visual><origin xyz="0 0 -0.018"/><geometry><cylinder radius="0.007" length="0.036"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.008"/><inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/></inertial>
+  </link>
+  <joint name="r_index_proximal_j" type="fixed">
+    <parent link="r_hand"/>
+    <child link="r_index_proximal"/>
+    <origin xyz="-0.012 0.02 -0.075"/>
+  </joint>
+  <link name="r_index_distal">
+    <visual><origin xyz="0 0 -0.014"/><geometry><cylinder radius="0.006" length="0.028"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.005"/><inertia ixx="0.0000005" ixy="0" ixz="0" iyy="0.0000005" iyz="0" izz="0.0000005"/></inertial>
+  </link>
+  <joint name="r_index_distal_j" type="fixed">
+    <parent link="r_index_proximal"/>
+    <child link="r_index_distal"/>
+    <origin xyz="0 0 -0.038"/>
+  </joint>
+
+  <link name="r_middle_proximal">
+    <visual><origin xyz="0 0 -0.019"/><geometry><cylinder radius="0.007" length="0.038"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.008"/><inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/></inertial>
+  </link>
+  <joint name="r_middle_proximal_j" type="fixed">
+    <parent link="r_hand"/>
+    <child link="r_middle_proximal"/>
+    <origin xyz="-0.004 0.02 -0.075"/>
+  </joint>
+  <link name="r_middle_distal">
+    <visual><origin xyz="0 0 -0.015"/><geometry><cylinder radius="0.006" length="0.030"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.005"/><inertia ixx="0.0000005" ixy="0" ixz="0" iyy="0.0000005" iyz="0" izz="0.0000005"/></inertial>
+  </link>
+  <joint name="r_middle_distal_j" type="fixed">
+    <parent link="r_middle_proximal"/>
+    <child link="r_middle_distal"/>
+    <origin xyz="0 0 -0.040"/>
+  </joint>
+
+  <link name="r_ring_proximal">
+    <visual><origin xyz="0 0 -0.017"/><geometry><cylinder radius="0.006" length="0.034"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.007"/><inertia ixx="0.0000008" ixy="0" ixz="0" iyy="0.0000008" iyz="0" izz="0.0000008"/></inertial>
+  </link>
+  <joint name="r_ring_proximal_j" type="fixed">
+    <parent link="r_hand"/>
+    <child link="r_ring_proximal"/>
+    <origin xyz="0.004 0.02 -0.073"/>
+  </joint>
+  <link name="r_ring_distal">
+    <visual><origin xyz="0 0 -0.013"/><geometry><cylinder radius="0.005" length="0.026"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.004"/><inertia ixx="0.0000003" ixy="0" ixz="0" iyy="0.0000003" iyz="0" izz="0.0000003"/></inertial>
+  </link>
+  <joint name="r_ring_distal_j" type="fixed">
+    <parent link="r_ring_proximal"/>
+    <child link="r_ring_distal"/>
+    <origin xyz="0 0 -0.036"/>
+  </joint>
+
+  <link name="r_pinky_proximal">
+    <visual><origin xyz="0 0 -0.013"/><geometry><cylinder radius="0.005" length="0.026"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.005"/><inertia ixx="0.0000005" ixy="0" ixz="0" iyy="0.0000005" iyz="0" izz="0.0000005"/></inertial>
+  </link>
+  <joint name="r_pinky_proximal_j" type="fixed">
+    <parent link="r_hand"/>
+    <child link="r_pinky_proximal"/>
+    <origin xyz="0.012 0.018 -0.065"/>
+  </joint>
+  <link name="r_pinky_distal">
+    <visual><origin xyz="0 0 -0.010"/><geometry><cylinder radius="0.004" length="0.020"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.003"/><inertia ixx="0.0000002" ixy="0" ixz="0" iyy="0.0000002" iyz="0" izz="0.0000002"/></inertial>
+  </link>
+  <joint name="r_pinky_distal_j" type="fixed">
+    <parent link="r_pinky_proximal"/>
+    <child link="r_pinky_distal"/>
+    <origin xyz="0 0 -0.028"/>
+  </joint>
+
+  <link name="r_thumb_proximal">
+    <visual><origin xyz="0 0 -0.016"/><geometry><cylinder radius="0.008" length="0.032"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.010"/><inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/></inertial>
+  </link>
+  <joint name="r_thumb_proximal_j" type="fixed">
+    <parent link="r_hand"/>
+    <child link="r_thumb_proximal"/>
+    <origin xyz="-0.025 0.005 -0.040" rpy="0 0.5 0"/>
+  </joint>
+  <link name="r_thumb_distal">
+    <visual><origin xyz="0 0 -0.012"/><geometry><cylinder radius="0.007" length="0.024"/></geometry><material name="skin"/></visual>
+    <inertial><mass value="0.007"/><inertia ixx="0.0000008" ixy="0" ixz="0" iyy="0.0000008" iyz="0" izz="0.0000008"/></inertial>
+  </link>
+  <joint name="r_thumb_distal_j" type="fixed">
+    <parent link="r_thumb_proximal"/>
+    <child link="r_thumb_distal"/>
+    <origin xyz="0 0 -0.034"/>
+  </joint>
+
+  <!-- ═══════════════════════════════════════════
+       BASSIN / PELVIS
+  ═══════════════════════════════════════════ -->
+  <link name="root_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/root.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.03"/>
+      <geometry><box size="0.12 0.14 0.06"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="1.5"/>
+      <inertia ixx="0.008" ixy="0" ixz="0" iyy="0.008" iyz="0" izz="0.006"/>
+    </inertial>
+  </link>
+  <joint name="root_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="root_link"/>
+    <origin xyz="0 0 -0.065"/>
+  </joint>
+
+  <!-- Ceinture abdominale -->
+  <link name="lap_belt_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/lap_belt.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+  <joint name="lap_belt_joint" type="fixed">
+    <parent link="root_link"/>
+    <child link="lap_belt_link"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <!-- ═══════════════════════════════════════════
+       HANCHE GAUCHE → JAMBE → GENOU → PIED
+  ═══════════════════════════════════════════ -->
+  <link name="l_hip_visual">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/l_hip_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.035"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.4"/>
+      <inertia ixx="0.0003" ixy="0" ixz="0" iyy="0.0003" iyz="0" izz="0.0003"/>
+    </inertial>
+  </link>
+  <joint name="l_hip_v_joint" type="fixed">
+    <parent link="root_link"/>
+    <child link="l_hip_visual"/>
+    <origin xyz="0 0.05 0"/>
+  </joint>
+
+  <link name="l_leg">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/l_upper_leg.dae" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.09"/>
+      <geometry><cylinder radius="0.030" length="0.18"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.9"/>
+      <inertia ixx="0.003" ixy="0" ixz="0" iyy="0.003" iyz="0" izz="0.0005"/>
+    </inertial>
+  </link>
+  <joint name="l_leg_j" type="fixed">
+    <parent link="l_hip_visual"/>
+    <child link="l_leg"/>
+    <origin xyz="0 0 -0.04"/>
+  </joint>
+
+  <link name="l_thigh_cover">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/torso_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="l_thigh_cover_joint" type="fixed">
+    <parent link="l_leg"/>
+    <child link="l_thigh_cover"/>
+    <origin xyz="0 0 -0.02"/>
+  </joint>
+
+  <link name="l_lower_leg">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/l_lower_leg.dae" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.06"/>
+      <geometry><cylinder radius="0.025" length="0.12"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.6"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0003"/>
+    </inertial>
+  </link>
+  <joint name="l_knee_joint" type="fixed">
+    <parent link="l_leg"/>
+    <child link="l_lower_leg"/>
+    <origin xyz="0 0 -0.18"/>
+  </joint>
+
+  <link name="l_calf_cover">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/torso_2.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="l_calf_cover_joint" type="fixed">
+    <parent link="l_lower_leg"/>
+    <child link="l_calf_cover"/>
+    <origin xyz="0 0 -0.02"/>
+  </joint>
+
+  <link name="l_foot">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/l_foot.dae" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.04 0 -0.015"/>
+      <geometry><box size="0.16 0.07 0.03"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0006"/>
+    </inertial>
+  </link>
+  <joint name="l_ankle_joint" type="fixed">
+    <parent link="l_lower_leg"/>
+    <child link="l_foot"/>
+    <origin xyz="0 0 -0.12"/>
+  </joint>
+
+  <!-- ═══════════════════════════════════════════
+       HANCHE DROITE → JAMBE → GENOU → PIED
+  ═══════════════════════════════════════════ -->
+  <link name="r_hip_visual">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/r_hip_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.035"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.4"/>
+      <inertia ixx="0.0003" ixy="0" ixz="0" iyy="0.0003" iyz="0" izz="0.0003"/>
+    </inertial>
+  </link>
+  <joint name="r_hip_v_joint" type="fixed">
+    <parent link="root_link"/>
+    <child link="r_hip_visual"/>
+    <origin xyz="0 -0.05 0"/>
+  </joint>
+
+  <link name="r_leg">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/r_upper_leg.dae" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.09"/>
+      <geometry><cylinder radius="0.030" length="0.18"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.9"/>
+      <inertia ixx="0.003" ixy="0" ixz="0" iyy="0.003" iyz="0" izz="0.0005"/>
+    </inertial>
+  </link>
+  <joint name="r_leg_j" type="fixed">
+    <parent link="r_hip_visual"/>
+    <child link="r_leg"/>
+    <origin xyz="0 0 -0.04"/>
+  </joint>
+
+  <link name="r_thigh_cover">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/torso_1.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="r_thigh_cover_joint" type="fixed">
+    <parent link="r_leg"/>
+    <child link="r_thigh_cover"/>
+    <origin xyz="0 0 -0.02"/>
+  </joint>
+
+  <link name="r_lower_leg">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/r_lower_leg.dae" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.06"/>
+      <geometry><cylinder radius="0.025" length="0.12"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.6"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0003"/>
+    </inertial>
+  </link>
+  <joint name="r_knee_joint" type="fixed">
+    <parent link="r_leg"/>
+    <child link="r_lower_leg"/>
+    <origin xyz="0 0 -0.18"/>
+  </joint>
+
+  <link name="r_calf_cover">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/torso_2.dae" scale="0.001 0.001 0.001"/></geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="r_calf_cover_joint" type="fixed">
+    <parent link="r_lower_leg"/>
+    <child link="r_calf_cover"/>
+    <origin xyz="0 0 -0.02"/>
+  </joint>
+
+  <link name="r_foot">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry><mesh filename="package://humanoid_robot/meshes/r_foot.dae" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.04 0 -0.015"/>
+      <geometry><box size="0.16 0.07 0.03"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0006"/>
+    </inertial>
+  </link>
+  <joint name="r_ankle_joint" type="fixed">
+    <parent link="r_lower_leg"/>
+    <child link="r_foot"/>
+    <origin xyz="0 0 -0.12"/>
+  </joint>
+
+</robot>
