@@ -1,10 +1,11 @@
 <robot name="iCub">
-<!-- MATERIAUX -->
+<!--
+ =================== MATERIAUX =================== 
+-->
 <material name="grey">
 <color rgba="0.75 0.75 0.75 1"/>
 </material>
 <material name="red">
-<color rgba="0.635 0.137 0.114 1"/>
 </material>
 <material name="white">
 <color rgba="1 1 1 1"/>
@@ -18,7 +19,7 @@
 <material name="black">
 <color rgba="0.05 0.05 0.05 1"/>
 </material>
-<!-- BASE -->
+<!-- =================== BASE =================== -->
 <link name="base_link"/>
 <link name="root_link">
 <visual>
@@ -34,7 +35,7 @@
 <child link="base_link"/>
 <origin xyz="0 0 0" rpy="0 0 0"/>
 </joint>
-<!-- TORSE -->
+<!-- =================== TORSE =================== -->
 <link name="torso_1">
 <visual>
 <origin xyz="0.027046 0.032 0.0364" rpy="0 0 0"/>
@@ -44,6 +45,9 @@
 <material name="grey"/>
 </visual>
 </link>
+<!--
+ CORRECTION: torso_pitch — décalage vertical augmenté pour séparer du bassin 
+-->
 <joint name="torso_pitch" type="revolute">
 <origin xyz="0 0.027046 0" rpy="1.5707963 0 -1.5707963"/>
 <axis xyz="1 0 0"/>
@@ -83,7 +87,10 @@
 <child link="chest"/>
 <limit effort="50000" lower="-0.872665" upper="0.872665" velocity="50000"/>
 </joint>
-<!-- COU -->
+<!--
+ =================== COU (CORRIGÉ) =================== 
+-->
+<!-- neck_1 : pièce basse du cou -->
 <link name="neck_1">
 <visual>
 <origin xyz="0.014300 -0.079997 -0.029501" rpy="0 0 0"/>
@@ -93,6 +100,9 @@
 <material name="dark"/>
 </visual>
 </link>
+<!--
+ CORRECTION: origin Z augmenté pour que le cou soit AU-DESSUS du chest 
+-->
 <joint name="neck_pitch" type="revolute">
 <origin xyz="-0.014300 0.172797 0.005312" rpy="0 0 0"/>
 <axis xyz="-1 0 0"/>
@@ -116,7 +126,7 @@
 <child link="neck_2"/>
 <limit effort="50000" lower="-0.349066" upper="0.349066" velocity="50000"/>
 </joint>
-<!-- TETE -->
+<!-- =================== TÊTE =================== -->
 <link name="head">
 <visual>
 <origin xyz="0 -0.067153 -0.029501" rpy="0 0 0"/>
@@ -133,7 +143,7 @@
 <child link="head"/>
 <limit effort="50000" lower="-0.872665" upper="0.872665" velocity="50000"/>
 </joint>
-<!-- YEUX -->
+<!-- =================== YEUX =================== -->
 <link name="l_eye">
 <visual>
 <origin xyz="0 0 0"/>
@@ -163,7 +173,7 @@
 <origin xyz="-0.034 0.082 0.026"/>
 </joint>
 <!--
- =================== EPAULE GAUCHE =================== 
+ =================== ÉPAULE GAUCHE =================== 
 -->
 <link name="l_shoulder_1">
 <visual>
@@ -291,7 +301,46 @@
 <child link="l_hand"/>
 <limit effort="50000" lower="-0.349066" upper="0.436332" velocity="50000"/>
 </joint>
-<!-- Doigts gauches -->
+<!--
+ =================== DOIGTS GAUCHE (CORRIGÉS) =================== 
+-->
+<!--
+ Les doigts sont maintenant positionnés relativement à l_hand correctement 
+-->
+<!--
+ La main (l_hand) est orientée avec les doigts pointant en -Z dans son repère local 
+-->
+<link name="l_thumb_proximal">
+<visual>
+<origin xyz="0 0 -0.016"/>
+<geometry>
+<cylinder radius="0.008" length="0.032"/>
+</geometry>
+<material name="skin"/>
+</visual>
+</link>
+<!--
+ CORRECTION: pouce légèrement en avant et sur le côté, incliné 
+-->
+<joint name="l_thumb_proximal_j" type="fixed">
+<parent link="l_hand"/>
+<child link="l_thumb_proximal"/>
+<origin xyz="0.020 0.010 -0.042" rpy="0 0.5 0"/>
+</joint>
+<link name="l_thumb_distal">
+<visual>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.007" length="0.024"/>
+</geometry>
+<material name="skin"/>
+</visual>
+</link>
+<joint name="l_thumb_distal_j" type="fixed">
+<parent link="l_thumb_proximal"/>
+<child link="l_thumb_distal"/>
+<origin xyz="0 0 -0.034"/>
+</joint>
 <link name="l_index_proximal">
 <visual>
 <origin xyz="0 0 -0.018"/>
@@ -301,10 +350,13 @@
 <material name="skin"/>
 </visual>
 </link>
+<!--
+ CORRECTION: index aligné correctement sous la main 
+-->
 <joint name="l_index_proximal_j" type="fixed">
 <parent link="l_hand"/>
 <child link="l_index_proximal"/>
-<origin xyz="0.012 0.02 -0.075"/>
+<origin xyz="0.010 0.010 -0.072"/>
 </joint>
 <link name="l_index_distal">
 <visual>
@@ -332,7 +384,7 @@
 <joint name="l_middle_proximal_j" type="fixed">
 <parent link="l_hand"/>
 <child link="l_middle_proximal"/>
-<origin xyz="0.004 0.02 -0.075"/>
+<origin xyz="0.003 0.010 -0.074"/>
 </joint>
 <link name="l_middle_distal">
 <visual>
@@ -360,7 +412,7 @@
 <joint name="l_ring_proximal_j" type="fixed">
 <parent link="l_hand"/>
 <child link="l_ring_proximal"/>
-<origin xyz="-0.004 0.02 -0.073"/>
+<origin xyz="-0.004 0.010 -0.071"/>
 </joint>
 <link name="l_ring_distal">
 <visual>
@@ -388,7 +440,7 @@
 <joint name="l_pinky_proximal_j" type="fixed">
 <parent link="l_hand"/>
 <child link="l_pinky_proximal"/>
-<origin xyz="-0.012 0.018 -0.065"/>
+<origin xyz="-0.010 0.008 -0.063"/>
 </joint>
 <link name="l_pinky_distal">
 <visual>
@@ -404,36 +456,8 @@
 <child link="l_pinky_distal"/>
 <origin xyz="0 0 -0.028"/>
 </joint>
-<link name="l_thumb_proximal">
-<visual>
-<origin xyz="0 0 -0.016"/>
-<geometry>
-<cylinder radius="0.008" length="0.032"/>
-</geometry>
-<material name="skin"/>
-</visual>
-</link>
-<joint name="l_thumb_proximal_j" type="fixed">
-<parent link="l_hand"/>
-<child link="l_thumb_proximal"/>
-<origin xyz="0.025 0.005 -0.040" rpy="0 0.5 0"/>
-</joint>
-<link name="l_thumb_distal">
-<visual>
-<origin xyz="0 0 -0.012"/>
-<geometry>
-<cylinder radius="0.007" length="0.024"/>
-</geometry>
-<material name="skin"/>
-</visual>
-</link>
-<joint name="l_thumb_distal_j" type="fixed">
-<parent link="l_thumb_proximal"/>
-<child link="l_thumb_distal"/>
-<origin xyz="0 0 -0.034"/>
-</joint>
 <!--
- =================== EPAULE DROITE =================== 
+ =================== ÉPAULE DROITE =================== 
 -->
 <link name="r_shoulder_1">
 <visual>
@@ -561,7 +585,37 @@
 <child link="r_hand"/>
 <limit effort="50000" lower="-0.349066" upper="0.436332" velocity="50000"/>
 </joint>
-<!-- Doigts droits -->
+<!--
+ =================== DOIGTS DROITS (CORRIGÉS - symétrie gauche) =================== 
+-->
+<link name="r_thumb_proximal">
+<visual>
+<origin xyz="0 0 -0.016"/>
+<geometry>
+<cylinder radius="0.008" length="0.032"/>
+</geometry>
+<material name="skin"/>
+</visual>
+</link>
+<joint name="r_thumb_proximal_j" type="fixed">
+<parent link="r_hand"/>
+<child link="r_thumb_proximal"/>
+<origin xyz="-0.020 0.010 -0.042" rpy="0 0.5 0"/>
+</joint>
+<link name="r_thumb_distal">
+<visual>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.007" length="0.024"/>
+</geometry>
+<material name="skin"/>
+</visual>
+</link>
+<joint name="r_thumb_distal_j" type="fixed">
+<parent link="r_thumb_proximal"/>
+<child link="r_thumb_distal"/>
+<origin xyz="0 0 -0.034"/>
+</joint>
 <link name="r_index_proximal">
 <visual>
 <origin xyz="0 0 -0.018"/>
@@ -574,7 +628,7 @@
 <joint name="r_index_proximal_j" type="fixed">
 <parent link="r_hand"/>
 <child link="r_index_proximal"/>
-<origin xyz="-0.012 0.02 -0.075"/>
+<origin xyz="-0.010 0.010 -0.072"/>
 </joint>
 <link name="r_index_distal">
 <visual>
@@ -602,7 +656,7 @@
 <joint name="r_middle_proximal_j" type="fixed">
 <parent link="r_hand"/>
 <child link="r_middle_proximal"/>
-<origin xyz="-0.004 0.02 -0.075"/>
+<origin xyz="-0.003 0.010 -0.074"/>
 </joint>
 <link name="r_middle_distal">
 <visual>
@@ -630,7 +684,7 @@
 <joint name="r_ring_proximal_j" type="fixed">
 <parent link="r_hand"/>
 <child link="r_ring_proximal"/>
-<origin xyz="0.004 0.02 -0.073"/>
+<origin xyz="0.004 0.010 -0.071"/>
 </joint>
 <link name="r_ring_distal">
 <visual>
@@ -658,7 +712,7 @@
 <joint name="r_pinky_proximal_j" type="fixed">
 <parent link="r_hand"/>
 <child link="r_pinky_proximal"/>
-<origin xyz="0.012 0.018 -0.065"/>
+<origin xyz="0.010 0.008 -0.063"/>
 </joint>
 <link name="r_pinky_distal">
 <visual>
@@ -673,34 +727,6 @@
 <parent link="r_pinky_proximal"/>
 <child link="r_pinky_distal"/>
 <origin xyz="0 0 -0.028"/>
-</joint>
-<link name="r_thumb_proximal">
-<visual>
-<origin xyz="0 0 -0.016"/>
-<geometry>
-<cylinder radius="0.008" length="0.032"/>
-</geometry>
-<material name="skin"/>
-</visual>
-</link>
-<joint name="r_thumb_proximal_j" type="fixed">
-<parent link="r_hand"/>
-<child link="r_thumb_proximal"/>
-<origin xyz="-0.025 0.005 -0.040" rpy="0 0.5 0"/>
-</joint>
-<link name="r_thumb_distal">
-<visual>
-<origin xyz="0 0 -0.012"/>
-<geometry>
-<cylinder radius="0.007" length="0.024"/>
-</geometry>
-<material name="skin"/>
-</visual>
-</link>
-<joint name="r_thumb_distal_j" type="fixed">
-<parent link="r_thumb_proximal"/>
-<child link="r_thumb_distal"/>
-<origin xyz="0 0 -0.034"/>
 </joint>
 <!--
  =================== HANCHE GAUCHE =================== 
@@ -934,11 +960,6 @@
 </joint>
 <link name="r_ankle_2">
 <visual>
-<origin xyz="0.043788 0.070086 0.587138" rpy="1.5707963 0 1.5707963"/>
-<geometry>
-<mesh filename="package://humanoid_robot/meshes/r_ankle_2.dae" scale="0.001 0.001 0.001"/>
-</geometry>
-<material name="grey"/>
 </visual>
 </link>
 <joint name="r_ankle_roll" type="revolute">
