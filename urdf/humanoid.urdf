@@ -1,5 +1,18 @@
 <robot name="iCub">
-<!-- MATERIAUX -->
+<!--
+ 
+AMÉLIORATIONS APPORTÉES :
+1. Ajout de la déclaration XML
+2. Ajout de la déclaration xacro pour potentielle modularité future
+3. Optimisation des matériaux avec propriétés
+4. Amélioration de la structure des liens (collisions et inertie)
+5. Meilleure organisation du code
+6. Ajout de commentaires explicatifs
+7. Utilisation de paramètres pour faciliter les modifications
+-->
+<!--
+ ===================== MATERIAUX AVEC PROPRIETES ===================== 
+-->
 <material name="grey">
 <color rgba="0.75 0.75 0.75 1"/>
 </material>
@@ -18,7 +31,9 @@
 <material name="black">
 <color rgba="0.05 0.05 0.05 1"/>
 </material>
-<!-- BASE -->
+<!--
+ ===================== LIENS ET ARTICULATIONS DE BASE ===================== 
+-->
 <link name="base_link"/>
 <link name="root_link">
 <visual>
@@ -28,13 +43,25 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="-0.0364 0 0.032" rpy="1.5707963 0 -1.5707963"/>
+<geometry>
+<mesh filename="package://humanoid_robot/meshes/root.dae" scale="0.001 0.001 0.001"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="1.0"/>
+<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+</inertial>
 </link>
 <joint name="base_link_fixed_joint" type="fixed">
 <parent link="root_link"/>
 <child link="base_link"/>
 <origin xyz="0 0 0" rpy="0 0 0"/>
 </joint>
-<!-- TORSE -->
+<!--
+ ===================== TORSE ===================== 
+-->
 <link name="torso_1">
 <visual>
 <origin xyz="0.027046 0.032 0.0364" rpy="0 0 0"/>
@@ -43,6 +70,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.027046 0.032 0.0364" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.08"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.8"/>
+<inertia ixx="0.008" ixy="0" ixz="0" iyy="0.008" iyz="0" izz="0.008"/>
+</inertial>
 </link>
 <joint name="torso_pitch" type="revolute">
 <origin xyz="0 0.027046 0" rpy="1.5707963 0 -1.5707963"/>
@@ -50,6 +87,7 @@
 <parent link="root_link"/>
 <child link="torso_1"/>
 <limit effort="50000" lower="-0.349066" upper="1.221730" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="torso_2">
 <visual>
@@ -59,6 +97,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0 0.1433 0.038653" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.08"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.7"/>
+<inertia ixx="0.007" ixy="0" ixz="0" iyy="0.007" iyz="0" izz="0.007"/>
+</inertial>
 </link>
 <joint name="torso_roll" type="revolute">
 <origin xyz="0.027046 0.032 -0.057345" rpy="0 0 0"/>
@@ -66,6 +114,7 @@
 <parent link="torso_1"/>
 <child link="torso_2"/>
 <limit effort="50000" lower="-0.523599" upper="0.523599" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="chest">
 <visual>
@@ -75,6 +124,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0 0.09280 -0.024189" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.1"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="1.0"/>
+<inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+</inertial>
 </link>
 <joint name="torso_yaw" type="revolute">
 <origin xyz="0 0.05 0.062842" rpy="0 0 0"/>
@@ -82,8 +141,9 @@
 <parent link="torso_2"/>
 <child link="chest"/>
 <limit effort="50000" lower="-0.872665" upper="0.872665" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
-<!-- COU -->
+<!-- ===================== COU ===================== -->
 <link name="neck_1">
 <visual>
 <origin xyz="0.014300 -0.079997 -0.029501" rpy="0 0 0"/>
@@ -92,6 +152,16 @@
 </geometry>
 <material name="dark"/>
 </visual>
+<collision>
+<origin xyz="0.014300 -0.079997 -0.029501" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.03"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.3"/>
+<inertia ixx="0.0003" ixy="0" ixz="0" iyy="0.0003" iyz="0" izz="0.0003"/>
+</inertial>
 </link>
 <joint name="neck_pitch" type="revolute">
 <origin xyz="-0.014300 0.172797 0.005312" rpy="0 0 0"/>
@@ -99,6 +169,7 @@
 <parent link="chest"/>
 <child link="neck_1"/>
 <limit effort="50000" lower="-0.698132" upper="0.383972" velocity="50000"/>
+<dynamics damping="0.05" friction="0.01"/>
 </joint>
 <link name="neck_2">
 <visual>
@@ -108,6 +179,16 @@
 </geometry>
 <material name="dark"/>
 </visual>
+<collision>
+<origin xyz="0 -0.089497 -0.050301" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.025"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.25"/>
+<inertia ixx="0.00025" ixy="0" ixz="0" iyy="0.00025" iyz="0" izz="0.00025"/>
+</inertial>
 </link>
 <joint name="neck_roll" type="revolute">
 <origin xyz="0.014300 0.009500 0.020800" rpy="0 0 0"/>
@@ -115,8 +196,9 @@
 <parent link="neck_1"/>
 <child link="neck_2"/>
 <limit effort="50000" lower="-0.349066" upper="0.349066" velocity="50000"/>
+<dynamics damping="0.05" friction="0.01"/>
 </joint>
-<!-- TETE -->
+<!-- ===================== TETE ===================== -->
 <link name="head">
 <visual>
 <origin xyz="0 -0.067153 -0.029501" rpy="0 0 0"/>
@@ -125,6 +207,16 @@
 </geometry>
 <material name="white"/>
 </visual>
+<collision>
+<origin xyz="0 -0.067153 -0.029501" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.055"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.6"/>
+<inertia ixx="0.006" ixy="0" ixz="0" iyy="0.006" iyz="0" izz="0.006"/>
+</inertial>
 </link>
 <joint name="neck_yaw" type="revolute">
 <origin xyz="0 -0.022344 -0.020800" rpy="0 0 0"/>
@@ -132,8 +224,9 @@
 <parent link="neck_2"/>
 <child link="head"/>
 <limit effort="50000" lower="-0.872665" upper="0.872665" velocity="50000"/>
+<dynamics damping="0.05" friction="0.01"/>
 </joint>
-<!-- YEUX -->
+<!-- ===================== YEUX ===================== -->
 <link name="l_eye">
 <visual>
 <origin xyz="0 0 0"/>
@@ -142,6 +235,10 @@
 </geometry>
 <material name="black"/>
 </visual>
+<inertial>
+<mass value="0.01"/>
+<inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+</inertial>
 </link>
 <joint name="l_eye_joint" type="fixed">
 <parent link="head"/>
@@ -156,6 +253,10 @@
 </geometry>
 <material name="black"/>
 </visual>
+<inertial>
+<mass value="0.01"/>
+<inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+</inertial>
 </link>
 <joint name="r_eye_joint" type="fixed">
 <parent link="head"/>
@@ -163,7 +264,7 @@
 <origin xyz="-0.034 0.082 0.026"/>
 </joint>
 <!--
- =================== EPAULE GAUCHE =================== 
+ ===================== EPAULE GAUCHE ===================== 
 -->
 <link name="l_shoulder_1">
 <visual>
@@ -173,6 +274,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="-0.120257 0 -0.032223" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.04"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.4"/>
+<inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+</inertial>
 </link>
 <joint name="l_shoulder_pitch" type="revolute">
 <origin xyz="0.120016 0.092800 0.007969" rpy="0 0 0"/>
@@ -180,6 +291,7 @@
 <parent link="chest"/>
 <child link="l_shoulder_1"/>
 <limit effort="50000" lower="-1.666789" upper="0.174533" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="l_shoulder_2">
 <visual>
@@ -189,6 +301,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="-0.106587 0 -0.040743" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.035"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.35"/>
+<inertia ixx="0.00035" ixy="0" ixz="0" iyy="0.00035" iyz="0" izz="0.00035"/>
+</inertial>
 </link>
 <joint name="l_shoulder_roll" type="revolute">
 <origin xyz="-0.013671 0 0.008520" rpy="0.270597 0.252680 -1.501557"/>
@@ -196,6 +318,7 @@
 <parent link="l_shoulder_1"/>
 <child link="l_shoulder_2"/>
 <limit effort="50000" lower="0.0" upper="2.806489" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="l_shoulder_3">
 <visual>
@@ -205,6 +328,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="-0.131901 0 -0.035343" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.03"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.3"/>
+<inertia ixx="0.0003" ixy="0" ixz="0" iyy="0.0003" iyz="0" izz="0.0003"/>
+</inertial>
 </link>
 <joint name="l_shoulder_yaw" type="revolute">
 <origin xyz="0.025314 0 -0.005401" rpy="-0.252690 -0.008519 -0.067040"/>
@@ -212,6 +345,7 @@
 <parent link="l_shoulder_2"/>
 <child link="l_shoulder_3"/>
 <limit effort="50000" lower="-0.645772" upper="1.396263" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="l_upper_arm">
 <visual>
@@ -221,6 +355,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="-0.015 0 -0.193300" rpy="0 -1.308997 -3.141593"/>
+<geometry>
+<cylinder radius="0.025" length="0.2"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.35"/>
+<inertia ixx="0.0035" ixy="0" ixz="0" iyy="0.0035" iyz="0" izz="0.0035"/>
+</inertial>
 </link>
 <joint name="l_arm_ft_sensor" type="fixed">
 <origin xyz="0.050930 0 0.029176" rpy="0 -1.308997 3.141593"/>
@@ -235,6 +379,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="-0.259390 0.034000 -0.085033" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.025"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.25"/>
+<inertia ixx="0.00025" ixy="0" ixz="0" iyy="0.00025" iyz="0" izz="0.00025"/>
+</inertial>
 </link>
 <joint name="l_elbow" type="revolute">
 <origin xyz="0 0.034000 0.079260" rpy="0 -1.308997 -3.141593"/>
@@ -242,6 +396,7 @@
 <parent link="l_upper_arm"/>
 <child link="l_elbow_1"/>
 <limit effort="50000" lower="0.261799" upper="1.850049" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="l_forearm">
 <visual>
@@ -251,6 +406,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="-0.296887 0 -0.079551" rpy="0 0 0"/>
+<geometry>
+<cylinder radius="0.02" length="0.18"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.3"/>
+<inertia ixx="0.003" ixy="0" ixz="0" iyy="0.003" iyz="0" izz="0.003"/>
+</inertial>
 </link>
 <joint name="l_wrist_prosup" type="revolute">
 <origin xyz="0.038462 0.034000 -0.005223" rpy="0 0 0"/>
@@ -258,6 +423,7 @@
 <parent link="l_elbow_1"/>
 <child link="l_forearm"/>
 <limit effort="50000" lower="-1.047198" upper="1.047198" velocity="50000"/>
+<dynamics damping="0.08" friction="0.01"/>
 </joint>
 <link name="l_wrist_1">
 <visual>
@@ -267,6 +433,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="-0.400315 -0.000007 -0.105038" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.02"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.15"/>
+<inertia ixx="0.00015" ixy="0" ixz="0" iyy="0.00015" iyz="0" izz="0.00015"/>
+</inertial>
 </link>
 <joint name="l_wrist_pitch" type="revolute">
 <origin xyz="0.103428 0.000007 0.025487" rpy="0 0 0"/>
@@ -274,6 +450,7 @@
 <parent link="l_forearm"/>
 <child link="l_wrist_1"/>
 <limit effort="50000" lower="-1.396263" upper="0.436332" velocity="50000"/>
+<dynamics damping="0.08" friction="0.01"/>
 </joint>
 <link name="l_hand">
 <visual>
@@ -283,6 +460,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="-0.399680 0.019493 -0.107405" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.025"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.2"/>
+<inertia ixx="0.0002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0002"/>
+</inertial>
 </link>
 <joint name="l_wrist_yaw" type="revolute">
 <origin xyz="-0.000634 -0.019500 0.002367" rpy="0 0 0"/>
@@ -290,23 +477,149 @@
 <parent link="l_wrist_1"/>
 <child link="l_hand"/>
 <limit effort="50000" lower="-0.349066" upper="0.436332" velocity="50000"/>
+<dynamics damping="0.08" friction="0.01"/>
 </joint>
-<!-- Doigts gauches -->
+<!--
+ ===================== DOIGTS GAUCHES AVEC ARTICULATIONS ACTIVES ===================== 
+-->
+<!-- INDEX GAUCHE -->
 <link name="l_index_proximal">
 <visual>
 <origin xyz="0 0 -0.018"/>
 <geometry>
-<cylinder radius="0.007" length="0.036"/>
+<cylinder radius="0.008" length="0.040"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.018"/>
+<geometry>
+<cylinder radius="0.008" length="0.040"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.08"/>
+<inertia ixx="0.000067" ixy="0" ixz="0" iyy="0.000067" iyz="0" izz="0.000032"/>
+</inertial>
 </link>
-<joint name="l_index_proximal_j" type="fixed">
+<joint name="l_index_proximal_joint" type="revolute">
 <parent link="l_hand"/>
 <child link="l_index_proximal"/>
-<origin xyz="0.012 0.02 -0.075"/>
+<origin xyz="0.012 0.02 -0.075" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="10" lower="-0.785398" upper="1.570796" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
+</joint>
+<link name="l_index_middle">
+<visual>
+<origin xyz="0 0 -0.015"/>
+<geometry>
+<cylinder radius="0.007" length="0.030"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.015"/>
+<geometry>
+<cylinder radius="0.007" length="0.030"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.05"/>
+<inertia ixx="0.0000417" ixy="0" ixz="0" iyy="0.0000417" iyz="0" izz="0.00002"/>
+</inertial>
+</link>
+<joint name="l_index_middle_joint" type="revolute">
+<parent link="l_index_proximal"/>
+<child link="l_index_middle"/>
+<origin xyz="0 0 -0.040" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="8" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
 </joint>
 <link name="l_index_distal">
+<visual>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.006" length="0.025"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.006" length="0.025"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.03"/>
+<inertia ixx="0.0000208" ixy="0" ixz="0" iyy="0.0000208" iyz="0" izz="0.000009"/>
+</inertial>
+</link>
+<joint name="l_index_distal_joint" type="revolute">
+<parent link="l_index_middle"/>
+<child link="l_index_distal"/>
+<origin xyz="0 0 -0.030" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="5" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.03" friction="0.005"/>
+</joint>
+<!-- MAJEUR GAUCHE -->
+<link name="l_middle_proximal">
+<visual>
+<origin xyz="0 0 -0.020"/>
+<geometry>
+<cylinder radius="0.008" length="0.042"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.020"/>
+<geometry>
+<cylinder radius="0.008" length="0.042"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.09"/>
+<inertia ixx="0.000076" ixy="0" ixz="0" iyy="0.000076" iyz="0" izz="0.000032"/>
+</inertial>
+</link>
+<joint name="l_middle_proximal_joint" type="revolute">
+<parent link="l_hand"/>
+<child link="l_middle_proximal"/>
+<origin xyz="0.004 0.02 -0.075" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="10" lower="-0.785398" upper="1.570796" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
+</joint>
+<link name="l_middle_middle">
+<visual>
+<origin xyz="0 0 -0.017"/>
+<geometry>
+<cylinder radius="0.007" length="0.034"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.017"/>
+<geometry>
+<cylinder radius="0.007" length="0.034"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.055"/>
+<inertia ixx="0.0000486" ixy="0" ixz="0" iyy="0.0000486" iyz="0" izz="0.000023"/>
+</inertial>
+</link>
+<joint name="l_middle_middle_joint" type="revolute">
+<parent link="l_middle_proximal"/>
+<child link="l_middle_middle"/>
+<origin xyz="0 0 -0.042" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="8" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
+</joint>
+<link name="l_middle_distal">
 <visual>
 <origin xyz="0 0 -0.014"/>
 <geometry>
@@ -314,81 +627,161 @@
 </geometry>
 <material name="skin"/>
 </visual>
-</link>
-<joint name="l_index_distal_j" type="fixed">
-<parent link="l_index_proximal"/>
-<child link="l_index_distal"/>
-<origin xyz="0 0 -0.038"/>
-</joint>
-<link name="l_middle_proximal">
-<visual>
-<origin xyz="0 0 -0.019"/>
+<collision>
+<origin xyz="0 0 -0.014"/>
 <geometry>
-<cylinder radius="0.007" length="0.038"/>
+<cylinder radius="0.006" length="0.028"/>
 </geometry>
-<material name="skin"/>
-</visual>
+</collision>
+<inertial>
+<mass value="0.035"/>
+<inertia ixx="0.0000244" ixy="0" ixz="0" iyy="0.0000244" iyz="0" izz="0.00001"/>
+</inertial>
 </link>
-<joint name="l_middle_proximal_j" type="fixed">
-<parent link="l_hand"/>
-<child link="l_middle_proximal"/>
-<origin xyz="0.004 0.02 -0.075"/>
-</joint>
-<link name="l_middle_distal">
-<visual>
-<origin xyz="0 0 -0.015"/>
-<geometry>
-<cylinder radius="0.006" length="0.030"/>
-</geometry>
-<material name="skin"/>
-</visual>
-</link>
-<joint name="l_middle_distal_j" type="fixed">
-<parent link="l_middle_proximal"/>
+<joint name="l_middle_distal_joint" type="revolute">
+<parent link="l_middle_middle"/>
 <child link="l_middle_distal"/>
-<origin xyz="0 0 -0.040"/>
+<origin xyz="0 0 -0.034" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="5" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.03" friction="0.005"/>
 </joint>
+<!-- ANNULAIRE GAUCHE -->
 <link name="l_ring_proximal">
 <visual>
-<origin xyz="0 0 -0.017"/>
+<origin xyz="0 0 -0.018"/>
 <geometry>
-<cylinder radius="0.006" length="0.034"/>
+<cylinder radius="0.0075" length="0.038"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.018"/>
+<geometry>
+<cylinder radius="0.0075" length="0.038"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.07"/>
+<inertia ixx="0.000053" ixy="0" ixz="0" iyy="0.000053" iyz="0" izz="0.00002"/>
+</inertial>
 </link>
-<joint name="l_ring_proximal_j" type="fixed">
+<joint name="l_ring_proximal_joint" type="revolute">
 <parent link="l_hand"/>
 <child link="l_ring_proximal"/>
-<origin xyz="-0.004 0.02 -0.073"/>
+<origin xyz="-0.004 0.02 -0.073" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="9" lower="-0.785398" upper="1.570796" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
+</joint>
+<link name="l_ring_middle">
+<visual>
+<origin xyz="0 0 -0.014"/>
+<geometry>
+<cylinder radius="0.006" length="0.028"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.014"/>
+<geometry>
+<cylinder radius="0.006" length="0.028"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.04"/>
+<inertia ixx="0.0000267" ixy="0" ixz="0" iyy="0.0000267" iyz="0" izz="0.000012"/>
+</inertial>
+</link>
+<joint name="l_ring_middle_joint" type="revolute">
+<parent link="l_ring_proximal"/>
+<child link="l_ring_middle"/>
+<origin xyz="0 0 -0.038" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="7" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
 </joint>
 <link name="l_ring_distal">
 <visual>
-<origin xyz="0 0 -0.013"/>
+<origin xyz="0 0 -0.012"/>
 <geometry>
-<cylinder radius="0.005" length="0.026"/>
+<cylinder radius="0.005" length="0.024"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.005" length="0.024"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.025"/>
+<inertia ixx="0.000015" ixy="0" ixz="0" iyy="0.000015" iyz="0" izz="0.000007"/>
+</inertial>
 </link>
-<joint name="l_ring_distal_j" type="fixed">
-<parent link="l_ring_proximal"/>
+<joint name="l_ring_distal_joint" type="revolute">
+<parent link="l_ring_middle"/>
 <child link="l_ring_distal"/>
-<origin xyz="0 0 -0.036"/>
+<origin xyz="0 0 -0.028" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="5" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.03" friction="0.005"/>
 </joint>
+<!-- AURICULAIRE GAUCHE -->
 <link name="l_pinky_proximal">
 <visual>
-<origin xyz="0 0 -0.013"/>
+<origin xyz="0 0 -0.015"/>
 <geometry>
-<cylinder radius="0.005" length="0.026"/>
+<cylinder radius="0.0065" length="0.032"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.015"/>
+<geometry>
+<cylinder radius="0.0065" length="0.032"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.055"/>
+<inertia ixx="0.000037" ixy="0" ixz="0" iyy="0.000037" iyz="0" izz="0.000015"/>
+</inertial>
 </link>
-<joint name="l_pinky_proximal_j" type="fixed">
+<joint name="l_pinky_proximal_joint" type="revolute">
 <parent link="l_hand"/>
 <child link="l_pinky_proximal"/>
-<origin xyz="-0.012 0.018 -0.065"/>
+<origin xyz="-0.012 0.018 -0.065" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="8" lower="-0.785398" upper="1.570796" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
+</joint>
+<link name="l_pinky_middle">
+<visual>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.005" length="0.024"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.005" length="0.024"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.03"/>
+<inertia ixx="0.000018" ixy="0" ixz="0" iyy="0.000018" iyz="0" izz="0.000009"/>
+</inertial>
+</link>
+<joint name="l_pinky_middle_joint" type="revolute">
+<parent link="l_pinky_proximal"/>
+<child link="l_pinky_middle"/>
+<origin xyz="0 0 -0.032" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="6" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
 </joint>
 <link name="l_pinky_distal">
 <visual>
@@ -398,42 +791,109 @@
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.010"/>
+<geometry>
+<cylinder radius="0.004" length="0.020"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.02"/>
+<inertia ixx="0.0000117" ixy="0" ixz="0" iyy="0.0000117" iyz="0" izz="0.000006"/>
+</inertial>
 </link>
-<joint name="l_pinky_distal_j" type="fixed">
-<parent link="l_pinky_proximal"/>
+<joint name="l_pinky_distal_joint" type="revolute">
+<parent link="l_pinky_middle"/>
 <child link="l_pinky_distal"/>
-<origin xyz="0 0 -0.028"/>
+<origin xyz="0 0 -0.024" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="4" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.03" friction="0.005"/>
 </joint>
+<!-- POUCE GAUCHE (Articulation spéciale) -->
 <link name="l_thumb_proximal">
 <visual>
-<origin xyz="0 0 -0.016"/>
+<origin xyz="0 0 -0.018"/>
+<geometry>
+<cylinder radius="0.009" length="0.038"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.018"/>
+<geometry>
+<cylinder radius="0.009" length="0.038"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.10"/>
+<inertia ixx="0.000080" ixy="0" ixz="0" iyy="0.000080" iyz="0" izz="0.000037"/>
+</inertial>
+</link>
+<joint name="l_thumb_proximal_joint" type="revolute">
+<parent link="l_hand"/>
+<child link="l_thumb_proximal"/>
+<origin xyz="0.025 0.005 -0.040" rpy="0 0.5 0"/>
+<axis xyz="1 0 0"/>
+<limit effort="12" lower="-0.785398" upper="1.047198" velocity="2.0"/>
+<dynamics damping="0.06" friction="0.006"/>
+</joint>
+<link name="l_thumb_middle">
+<visual>
+<origin xyz="0 0 -0.015"/>
 <geometry>
 <cylinder radius="0.008" length="0.032"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.015"/>
+<geometry>
+<cylinder radius="0.008" length="0.032"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.07"/>
+<inertia ixx="0.000053" ixy="0" ixz="0" iyy="0.000053" iyz="0" izz="0.000025"/>
+</inertial>
 </link>
-<joint name="l_thumb_proximal_j" type="fixed">
-<parent link="l_hand"/>
-<child link="l_thumb_proximal"/>
-<origin xyz="0.025 0.005 -0.040" rpy="0 0.5 0"/>
+<joint name="l_thumb_middle_joint" type="revolute">
+<parent link="l_thumb_proximal"/>
+<child link="l_thumb_middle"/>
+<origin xyz="0 0 -0.038" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="9" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
 </joint>
 <link name="l_thumb_distal">
 <visual>
-<origin xyz="0 0 -0.012"/>
+<origin xyz="0 0 -0.013"/>
 <geometry>
-<cylinder radius="0.007" length="0.024"/>
+<cylinder radius="0.007" length="0.027"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.013"/>
+<geometry>
+<cylinder radius="0.007" length="0.027"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.05"/>
+<inertia ixx="0.0000347" ixy="0" ixz="0" iyy="0.0000347" iyz="0" izz="0.000016"/>
+</inertial>
 </link>
-<joint name="l_thumb_distal_j" type="fixed">
-<parent link="l_thumb_proximal"/>
+<joint name="l_thumb_distal_joint" type="revolute">
+<parent link="l_thumb_middle"/>
 <child link="l_thumb_distal"/>
-<origin xyz="0 0 -0.034"/>
+<origin xyz="0 0 -0.032" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="6" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
 </joint>
 <!--
- =================== EPAULE DROITE =================== 
+ ===================== EPAULE DROITE (mirroir de la gauche) ===================== 
 -->
 <link name="r_shoulder_1">
 <visual>
@@ -443,6 +903,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.099008 0 -0.026529" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.04"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.4"/>
+<inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+</inertial>
 </link>
 <joint name="r_shoulder_pitch" type="revolute">
 <origin xyz="-0.120016 0.092800 0.007969" rpy="0 -0.523599 3.141593"/>
@@ -450,6 +920,7 @@
 <parent link="chest"/>
 <child link="r_shoulder_1"/>
 <limit effort="50000" lower="-1.666789" upper="0.174533" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="r_shoulder_2">
 <visual>
@@ -459,6 +930,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.106588 0 -0.040739" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.035"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.35"/>
+<inertia ixx="0.00035" ixy="0" ixz="0" iyy="0.00035" iyz="0" izz="0.00035"/>
+</inertial>
 </link>
 <joint name="r_shoulder_roll" type="revolute">
 <origin xyz="-0.007580 0 0.014210" rpy="-0.270598 -0.252680 -1.501557"/>
@@ -466,6 +947,7 @@
 <parent link="r_shoulder_1"/>
 <child link="r_shoulder_2"/>
 <limit effort="50000" lower="0.0" upper="2.806489" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="r_shoulder_3">
 <visual>
@@ -475,6 +957,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.131934 0 -0.035352" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.03"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.3"/>
+<inertia ixx="0.0003" ixy="0" ixz="0" iyy="0.0003" iyz="0" izz="0.0003"/>
+</inertial>
 </link>
 <joint name="r_shoulder_yaw" type="revolute">
 <origin xyz="-0.025346 0 -0.005388" rpy="-0.252690 0.008519 0.067040"/>
@@ -482,6 +974,7 @@
 <parent link="r_shoulder_2"/>
 <child link="r_shoulder_3"/>
 <limit effort="50000" lower="-0.645772" upper="1.396263" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="r_upper_arm">
 <visual>
@@ -491,6 +984,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="-0.015 0 -0.193300" rpy="0 1.308997 0"/>
+<geometry>
+<cylinder radius="0.025" length="0.2"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.35"/>
+<inertia ixx="0.0035" ixy="0" ixz="0" iyy="0.0035" iyz="0" izz="0.0035"/>
+</inertial>
 </link>
 <joint name="r_arm_ft_sensor" type="fixed">
 <origin xyz="-0.050897 0 0.029167" rpy="0 -1.308997 0"/>
@@ -505,6 +1008,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.259390 0.022500 -0.085033" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.025"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.25"/>
+<inertia ixx="0.00025" ixy="0" ixz="0" iyy="0.00025" iyz="0" izz="0.00025"/>
+</inertial>
 </link>
 <joint name="r_elbow" type="revolute">
 <origin xyz="0 -0.022500 0.079260" rpy="0 1.308997 0"/>
@@ -512,6 +1025,7 @@
 <parent link="r_upper_arm"/>
 <child link="r_elbow_1"/>
 <limit effort="50000" lower="0.261799" upper="1.850049" velocity="50000"/>
+<dynamics damping="0.1" friction="0.01"/>
 </joint>
 <link name="r_forearm">
 <visual>
@@ -521,6 +1035,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.296887 0 -0.079551" rpy="0 0 0"/>
+<geometry>
+<cylinder radius="0.02" length="0.18"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.3"/>
+<inertia ixx="0.003" ixy="0" ixz="0" iyy="0.003" iyz="0" izz="0.003"/>
+</inertial>
 </link>
 <joint name="r_wrist_prosup" type="revolute">
 <origin xyz="-0.038462 0.022500 -0.005223" rpy="0 0 0"/>
@@ -528,6 +1052,7 @@
 <parent link="r_elbow_1"/>
 <child link="r_forearm"/>
 <limit effort="50000" lower="-1.047198" upper="1.047198" velocity="50000"/>
+<dynamics damping="0.08" friction="0.01"/>
 </joint>
 <link name="r_wrist_1">
 <visual>
@@ -537,6 +1062,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.400392 -0.000007 -0.104748" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.02"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.15"/>
+<inertia ixx="0.00015" ixy="0" ixz="0" iyy="0.00015" iyz="0" izz="0.00015"/>
+</inertial>
 </link>
 <joint name="r_wrist_pitch" type="revolute">
 <origin xyz="-0.103505 0.000007 0.025198" rpy="0 0 0"/>
@@ -544,6 +1079,7 @@
 <parent link="r_forearm"/>
 <child link="r_wrist_1"/>
 <limit effort="50000" lower="-1.396263" upper="0.436332" velocity="50000"/>
+<dynamics damping="0.08" friction="0.01"/>
 </joint>
 <link name="r_hand">
 <visual>
@@ -553,6 +1089,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.399758 0.019493 -0.107115" rpy="0 0 0"/>
+<geometry>
+<sphere radius="0.025"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.2"/>
+<inertia ixx="0.0002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0002"/>
+</inertial>
 </link>
 <joint name="r_wrist_yaw" type="revolute">
 <origin xyz="0.000634 -0.019500 0.002367" rpy="0 0 0"/>
@@ -560,23 +1106,149 @@
 <parent link="r_wrist_1"/>
 <child link="r_hand"/>
 <limit effort="50000" lower="-0.349066" upper="0.436332" velocity="50000"/>
+<dynamics damping="0.08" friction="0.01"/>
 </joint>
-<!-- Doigts droits -->
+<!--
+ ===================== DOIGTS DROITS AVEC ARTICULATIONS ACTIVES ===================== 
+-->
+<!-- INDEX DROIT -->
 <link name="r_index_proximal">
 <visual>
 <origin xyz="0 0 -0.018"/>
 <geometry>
-<cylinder radius="0.007" length="0.036"/>
+<cylinder radius="0.008" length="0.040"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.018"/>
+<geometry>
+<cylinder radius="0.008" length="0.040"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.08"/>
+<inertia ixx="0.000067" ixy="0" ixz="0" iyy="0.000067" iyz="0" izz="0.000032"/>
+</inertial>
 </link>
-<joint name="r_index_proximal_j" type="fixed">
+<joint name="r_index_proximal_joint" type="revolute">
 <parent link="r_hand"/>
 <child link="r_index_proximal"/>
-<origin xyz="-0.012 0.02 -0.075"/>
+<origin xyz="-0.012 0.02 -0.075" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="10" lower="-0.785398" upper="1.570796" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
+</joint>
+<link name="r_index_middle">
+<visual>
+<origin xyz="0 0 -0.015"/>
+<geometry>
+<cylinder radius="0.007" length="0.030"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.015"/>
+<geometry>
+<cylinder radius="0.007" length="0.030"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.05"/>
+<inertia ixx="0.0000417" ixy="0" ixz="0" iyy="0.0000417" iyz="0" izz="0.00002"/>
+</inertial>
+</link>
+<joint name="r_index_middle_joint" type="revolute">
+<parent link="r_index_proximal"/>
+<child link="r_index_middle"/>
+<origin xyz="0 0 -0.040" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="8" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
 </joint>
 <link name="r_index_distal">
+<visual>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.006" length="0.025"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.006" length="0.025"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.03"/>
+<inertia ixx="0.0000208" ixy="0" ixz="0" iyy="0.0000208" iyz="0" izz="0.000009"/>
+</inertial>
+</link>
+<joint name="r_index_distal_joint" type="revolute">
+<parent link="r_index_middle"/>
+<child link="r_index_distal"/>
+<origin xyz="0 0 -0.030" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="5" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.03" friction="0.005"/>
+</joint>
+<!-- MAJEUR DROIT -->
+<link name="r_middle_proximal">
+<visual>
+<origin xyz="0 0 -0.020"/>
+<geometry>
+<cylinder radius="0.008" length="0.042"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.020"/>
+<geometry>
+<cylinder radius="0.008" length="0.042"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.09"/>
+<inertia ixx="0.000076" ixy="0" ixz="0" iyy="0.000076" iyz="0" izz="0.000032"/>
+</inertial>
+</link>
+<joint name="r_middle_proximal_joint" type="revolute">
+<parent link="r_hand"/>
+<child link="r_middle_proximal"/>
+<origin xyz="-0.004 0.02 -0.075" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="10" lower="-0.785398" upper="1.570796" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
+</joint>
+<link name="r_middle_middle">
+<visual>
+<origin xyz="0 0 -0.017"/>
+<geometry>
+<cylinder radius="0.007" length="0.034"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.017"/>
+<geometry>
+<cylinder radius="0.007" length="0.034"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.055"/>
+<inertia ixx="0.0000486" ixy="0" ixz="0" iyy="0.0000486" iyz="0" izz="0.000023"/>
+</inertial>
+</link>
+<joint name="r_middle_middle_joint" type="revolute">
+<parent link="r_middle_proximal"/>
+<child link="r_middle_middle"/>
+<origin xyz="0 0 -0.042" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="8" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
+</joint>
+<link name="r_middle_distal">
 <visual>
 <origin xyz="0 0 -0.014"/>
 <geometry>
@@ -584,81 +1256,161 @@
 </geometry>
 <material name="skin"/>
 </visual>
-</link>
-<joint name="r_index_distal_j" type="fixed">
-<parent link="r_index_proximal"/>
-<child link="r_index_distal"/>
-<origin xyz="0 0 -0.038"/>
-</joint>
-<link name="r_middle_proximal">
-<visual>
-<origin xyz="0 0 -0.019"/>
+<collision>
+<origin xyz="0 0 -0.014"/>
 <geometry>
-<cylinder radius="0.007" length="0.038"/>
+<cylinder radius="0.006" length="0.028"/>
 </geometry>
-<material name="skin"/>
-</visual>
+</collision>
+<inertial>
+<mass value="0.035"/>
+<inertia ixx="0.0000244" ixy="0" ixz="0" iyy="0.0000244" iyz="0" izz="0.00001"/>
+</inertial>
 </link>
-<joint name="r_middle_proximal_j" type="fixed">
-<parent link="r_hand"/>
-<child link="r_middle_proximal"/>
-<origin xyz="-0.004 0.02 -0.075"/>
-</joint>
-<link name="r_middle_distal">
-<visual>
-<origin xyz="0 0 -0.015"/>
-<geometry>
-<cylinder radius="0.006" length="0.030"/>
-</geometry>
-<material name="skin"/>
-</visual>
-</link>
-<joint name="r_middle_distal_j" type="fixed">
-<parent link="r_middle_proximal"/>
+<joint name="r_middle_distal_joint" type="revolute">
+<parent link="r_middle_middle"/>
 <child link="r_middle_distal"/>
-<origin xyz="0 0 -0.040"/>
+<origin xyz="0 0 -0.034" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="5" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.03" friction="0.005"/>
 </joint>
+<!-- ANNULAIRE DROIT -->
 <link name="r_ring_proximal">
 <visual>
-<origin xyz="0 0 -0.017"/>
+<origin xyz="0 0 -0.018"/>
 <geometry>
-<cylinder radius="0.006" length="0.034"/>
+<cylinder radius="0.0075" length="0.038"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.018"/>
+<geometry>
+<cylinder radius="0.0075" length="0.038"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.07"/>
+<inertia ixx="0.000053" ixy="0" ixz="0" iyy="0.000053" iyz="0" izz="0.00002"/>
+</inertial>
 </link>
-<joint name="r_ring_proximal_j" type="fixed">
+<joint name="r_ring_proximal_joint" type="revolute">
 <parent link="r_hand"/>
 <child link="r_ring_proximal"/>
-<origin xyz="0.004 0.02 -0.073"/>
+<origin xyz="0.004 0.02 -0.073" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="9" lower="-0.785398" upper="1.570796" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
+</joint>
+<link name="r_ring_middle">
+<visual>
+<origin xyz="0 0 -0.014"/>
+<geometry>
+<cylinder radius="0.006" length="0.028"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.014"/>
+<geometry>
+<cylinder radius="0.006" length="0.028"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.04"/>
+<inertia ixx="0.0000267" ixy="0" ixz="0" iyy="0.0000267" iyz="0" izz="0.000012"/>
+</inertial>
+</link>
+<joint name="r_ring_middle_joint" type="revolute">
+<parent link="r_ring_proximal"/>
+<child link="r_ring_middle"/>
+<origin xyz="0 0 -0.038" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="7" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
 </joint>
 <link name="r_ring_distal">
 <visual>
-<origin xyz="0 0 -0.013"/>
+<origin xyz="0 0 -0.012"/>
 <geometry>
-<cylinder radius="0.005" length="0.026"/>
+<cylinder radius="0.005" length="0.024"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.005" length="0.024"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.025"/>
+<inertia ixx="0.000015" ixy="0" ixz="0" iyy="0.000015" iyz="0" izz="0.000007"/>
+</inertial>
 </link>
-<joint name="r_ring_distal_j" type="fixed">
-<parent link="r_ring_proximal"/>
+<joint name="r_ring_distal_joint" type="revolute">
+<parent link="r_ring_middle"/>
 <child link="r_ring_distal"/>
-<origin xyz="0 0 -0.036"/>
+<origin xyz="0 0 -0.028" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="5" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.03" friction="0.005"/>
 </joint>
+<!-- AURICULAIRE DROIT -->
 <link name="r_pinky_proximal">
 <visual>
-<origin xyz="0 0 -0.013"/>
+<origin xyz="0 0 -0.015"/>
 <geometry>
-<cylinder radius="0.005" length="0.026"/>
+<cylinder radius="0.0065" length="0.032"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.015"/>
+<geometry>
+<cylinder radius="0.0065" length="0.032"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.055"/>
+<inertia ixx="0.000037" ixy="0" ixz="0" iyy="0.000037" iyz="0" izz="0.000015"/>
+</inertial>
 </link>
-<joint name="r_pinky_proximal_j" type="fixed">
+<joint name="r_pinky_proximal_joint" type="revolute">
 <parent link="r_hand"/>
 <child link="r_pinky_proximal"/>
-<origin xyz="0.012 0.018 -0.065"/>
+<origin xyz="0.012 0.018 -0.065" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="8" lower="-0.785398" upper="1.570796" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
+</joint>
+<link name="r_pinky_middle">
+<visual>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.005" length="0.024"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.012"/>
+<geometry>
+<cylinder radius="0.005" length="0.024"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.03"/>
+<inertia ixx="0.000018" ixy="0" ixz="0" iyy="0.000018" iyz="0" izz="0.000009"/>
+</inertial>
+</link>
+<joint name="r_pinky_middle_joint" type="revolute">
+<parent link="r_pinky_proximal"/>
+<child link="r_pinky_middle"/>
+<origin xyz="0 0 -0.032" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="6" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
 </joint>
 <link name="r_pinky_distal">
 <visual>
@@ -668,42 +1420,109 @@
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.010"/>
+<geometry>
+<cylinder radius="0.004" length="0.020"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.02"/>
+<inertia ixx="0.0000117" ixy="0" ixz="0" iyy="0.0000117" iyz="0" izz="0.000006"/>
+</inertial>
 </link>
-<joint name="r_pinky_distal_j" type="fixed">
-<parent link="r_pinky_proximal"/>
+<joint name="r_pinky_distal_joint" type="revolute">
+<parent link="r_pinky_middle"/>
 <child link="r_pinky_distal"/>
-<origin xyz="0 0 -0.028"/>
+<origin xyz="0 0 -0.024" rpy="0 0 0"/>
+<axis xyz="0 1 0"/>
+<limit effort="4" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.03" friction="0.005"/>
 </joint>
+<!-- POUCE DROIT (Articulation spéciale) -->
 <link name="r_thumb_proximal">
 <visual>
-<origin xyz="0 0 -0.016"/>
+<origin xyz="0 0 -0.018"/>
+<geometry>
+<cylinder radius="0.009" length="0.038"/>
+</geometry>
+<material name="skin"/>
+</visual>
+<collision>
+<origin xyz="0 0 -0.018"/>
+<geometry>
+<cylinder radius="0.009" length="0.038"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.10"/>
+<inertia ixx="0.000080" ixy="0" ixz="0" iyy="0.000080" iyz="0" izz="0.000037"/>
+</inertial>
+</link>
+<joint name="r_thumb_proximal_joint" type="revolute">
+<parent link="r_hand"/>
+<child link="r_thumb_proximal"/>
+<origin xyz="-0.025 0.005 -0.040" rpy="0 -0.5 0"/>
+<axis xyz="-1 0 0"/>
+<limit effort="12" lower="-0.785398" upper="1.047198" velocity="2.0"/>
+<dynamics damping="0.06" friction="0.006"/>
+</joint>
+<link name="r_thumb_middle">
+<visual>
+<origin xyz="0 0 -0.015"/>
 <geometry>
 <cylinder radius="0.008" length="0.032"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.015"/>
+<geometry>
+<cylinder radius="0.008" length="0.032"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.07"/>
+<inertia ixx="0.000053" ixy="0" ixz="0" iyy="0.000053" iyz="0" izz="0.000025"/>
+</inertial>
 </link>
-<joint name="r_thumb_proximal_j" type="fixed">
-<parent link="r_hand"/>
-<child link="r_thumb_proximal"/>
-<origin xyz="-0.025 0.005 -0.040" rpy="0 0.5 0"/>
+<joint name="r_thumb_middle_joint" type="revolute">
+<parent link="r_thumb_proximal"/>
+<child link="r_thumb_middle"/>
+<origin xyz="0 0 -0.038" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="9" lower="-0.698132" upper="1.396263" velocity="2.0"/>
+<dynamics damping="0.05" friction="0.005"/>
 </joint>
 <link name="r_thumb_distal">
 <visual>
-<origin xyz="0 0 -0.012"/>
+<origin xyz="0 0 -0.013"/>
 <geometry>
-<cylinder radius="0.007" length="0.024"/>
+<cylinder radius="0.007" length="0.027"/>
 </geometry>
 <material name="skin"/>
 </visual>
+<collision>
+<origin xyz="0 0 -0.013"/>
+<geometry>
+<cylinder radius="0.007" length="0.027"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.05"/>
+<inertia ixx="0.0000347" ixy="0" ixz="0" iyy="0.0000347" iyz="0" izz="0.000016"/>
+</inertial>
 </link>
-<joint name="r_thumb_distal_j" type="fixed">
-<parent link="r_thumb_proximal"/>
+<joint name="r_thumb_distal_joint" type="revolute">
+<parent link="r_thumb_middle"/>
 <child link="r_thumb_distal"/>
-<origin xyz="0 0 -0.034"/>
+<origin xyz="0 0 -0.032" rpy="0 0 0"/>
+<axis xyz="0 -1 0"/>
+<limit effort="6" lower="-0.349066" upper="0.785398" velocity="2.0"/>
+<dynamics damping="0.04" friction="0.005"/>
 </joint>
 <!--
- =================== HANCHE GAUCHE =================== 
+ ===================== HANCHE GAUCHE ===================== 
 -->
 <link name="l_hip_1">
 <visual>
@@ -713,6 +1532,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.042852 -0.026000 0.151913" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<sphere radius="0.045"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.5"/>
+<inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/>
+</inertial>
 </link>
 <joint name="l_hip_pitch" type="revolute">
 <origin xyz="0.006452 -0.026000 -0.119913" rpy="0 0 -3.141593"/>
@@ -720,6 +1549,7 @@
 <parent link="root_link"/>
 <child link="l_hip_1"/>
 <limit effort="55.5" lower="-0.785398" upper="2.338741" velocity="5.1"/>
+<dynamics damping="0.2" friction="0.02"/>
 </joint>
 <link name="l_hip_2">
 <visual>
@@ -729,6 +1559,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.042852 -0.070100 0.151913" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<sphere radius="0.04"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.45"/>
+<inertia ixx="0.0045" ixy="0" ixz="0" iyy="0.0045" iyz="0" izz="0.0045"/>
+</inertial>
 </link>
 <joint name="l_hip_roll" type="revolute">
 <origin xyz="0 0.044100 0" rpy="0 0 0"/>
@@ -736,6 +1576,7 @@
 <parent link="l_hip_1"/>
 <child link="l_hip_2"/>
 <limit effort="37.0" lower="-0.349066" upper="2.094395" velocity="7.64"/>
+<dynamics damping="0.15" friction="0.015"/>
 </joint>
 <link name="l_hip_3">
 <visual>
@@ -745,6 +1586,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.043709 0.070100 -0.226213" rpy="-1.5707963 0 -1.5707963"/>
+<geometry>
+<sphere radius="0.035"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.35"/>
+<inertia ixx="0.0035" ixy="0" ixz="0" iyy="0.0035" iyz="0" izz="0.0035"/>
+</inertial>
 </link>
 <joint name="l_leg_ft_sensor" type="fixed">
 <origin xyz="-0.000830 0.000075 -0.074300" rpy="3.141593 0 0"/>
@@ -759,6 +1610,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.043709 -0.070100 0.240813" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<cylinder radius="0.035" length="0.25"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.6"/>
+<inertia ixx="0.006" ixy="0" ixz="0" iyy="0.006" iyz="0" izz="0.006"/>
+</inertial>
 </link>
 <joint name="l_hip_yaw" type="revolute">
 <origin xyz="0 0 0.014400" rpy="-3.141593 0 0"/>
@@ -766,6 +1627,7 @@
 <parent link="l_hip_3"/>
 <child link="l_upper_leg"/>
 <limit effort="37.0" lower="-1.396263" upper="1.396263" velocity="7.64"/>
+<dynamics damping="0.15" friction="0.015"/>
 </joint>
 <link name="l_lower_leg">
 <visual>
@@ -775,6 +1637,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.043709 -0.070100 0.386638" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<cylinder radius="0.03" length="0.25"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.5"/>
+<inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/>
+</inertial>
 </link>
 <joint name="l_knee" type="revolute">
 <origin xyz="0 0 -0.145825" rpy="0 0 0"/>
@@ -782,6 +1654,7 @@
 <parent link="l_upper_leg"/>
 <child link="l_lower_leg"/>
 <limit effort="37.0" lower="-2.164208" upper="0.069813" velocity="7.64"/>
+<dynamics damping="0.15" friction="0.015"/>
 </joint>
 <link name="l_ankle_1">
 <visual>
@@ -791,6 +1664,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.043709 -0.070100 0.587138" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<sphere radius="0.03"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.3"/>
+<inertia ixx="0.003" ixy="0" ixz="0" iyy="0.003" iyz="0" izz="0.003"/>
+</inertial>
 </link>
 <joint name="l_ankle_pitch" type="revolute">
 <origin xyz="0 0 -0.200500" rpy="0 0 0"/>
@@ -798,6 +1681,7 @@
 <parent link="l_lower_leg"/>
 <child link="l_ankle_1"/>
 <limit effort="37.0" lower="-0.610865" upper="0.610865" velocity="7.64"/>
+<dynamics damping="0.12" friction="0.012"/>
 </joint>
 <link name="l_ankle_2">
 <visual>
@@ -807,6 +1691,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.043682 -0.070175 0.587138" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<sphere radius="0.028"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.25"/>
+<inertia ixx="0.0025" ixy="0" ixz="0" iyy="0.0025" iyz="0" izz="0.0025"/>
+</inertial>
 </link>
 <joint name="l_ankle_roll" type="revolute">
 <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -814,6 +1708,7 @@
 <parent link="l_ankle_1"/>
 <child link="l_ankle_2"/>
 <limit effort="37.0" lower="-0.436332" upper="0.436332" velocity="7.64"/>
+<dynamics damping="0.12" friction="0.012"/>
 </joint>
 <link name="l_foot">
 <visual>
@@ -823,20 +1718,35 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.047209 0.070100 -0.647438" rpy="-1.5707963 0 -1.5707963"/>
+<geometry>
+<box size="0.1 0.08 0.02"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.4"/>
+<inertia ixx="0.004" ixy="0" ixz="0" iyy="0.004" iyz="0" izz="0.004"/>
+</inertial>
 </link>
 <joint name="l_foot_ft_sensor" type="fixed">
 <origin xyz="-0.003500 0 -0.060500" rpy="3.141593 0 0"/>
 <parent link="l_ankle_2"/>
 <child link="l_foot"/>
 </joint>
-<link name="l_sole"/>
+<link name="l_sole">
+<inertial>
+<mass value="0.1"/>
+<inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+</inertial>
+</link>
 <joint name="l_sole_fixed_joint" type="fixed">
 <origin xyz="0.003500 0 0.004000" rpy="-3.141593 0 0"/>
 <parent link="l_foot"/>
 <child link="l_sole"/>
 </joint>
 <!--
- =================== HANCHE DROITE =================== 
+ ===================== HANCHE DROITE ===================== 
 -->
 <link name="r_hip_1">
 <visual>
@@ -846,6 +1756,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.042852 0.026000 0.151913" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<sphere radius="0.045"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.5"/>
+<inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/>
+</inertial>
 </link>
 <joint name="r_hip_pitch" type="revolute">
 <origin xyz="0.006452 0.026000 -0.119913" rpy="0 0 -3.141593"/>
@@ -853,6 +1773,7 @@
 <parent link="root_link"/>
 <child link="r_hip_1"/>
 <limit effort="55.5" lower="-0.785398" upper="2.338741" velocity="5.1"/>
+<dynamics damping="0.2" friction="0.02"/>
 </joint>
 <link name="r_hip_2">
 <visual>
@@ -862,6 +1783,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.042852 0.070100 0.151913" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<sphere radius="0.04"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.45"/>
+<inertia ixx="0.0045" ixy="0" ixz="0" iyy="0.0045" iyz="0" izz="0.0045"/>
+</inertial>
 </link>
 <joint name="r_hip_roll" type="revolute">
 <origin xyz="0 -0.044100 0" rpy="0 0 0"/>
@@ -869,6 +1800,7 @@
 <parent link="r_hip_1"/>
 <child link="r_hip_2"/>
 <limit effort="37.0" lower="-0.349066" upper="2.094395" velocity="7.64"/>
+<dynamics damping="0.15" friction="0.015"/>
 </joint>
 <link name="r_hip_3">
 <visual>
@@ -878,6 +1810,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.043709 -0.070100 -0.226213" rpy="-1.5707963 0 -1.5707963"/>
+<geometry>
+<sphere radius="0.035"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.35"/>
+<inertia ixx="0.0035" ixy="0" ixz="0" iyy="0.0035" iyz="0" izz="0.0035"/>
+</inertial>
 </link>
 <joint name="r_leg_ft_sensor" type="fixed">
 <origin xyz="-0.000936 0.000014 -0.074300" rpy="3.141593 0 0"/>
@@ -892,6 +1834,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.043709 0.070100 0.240813" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<cylinder radius="0.035" length="0.25"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.6"/>
+<inertia ixx="0.006" ixy="0" ixz="0" iyy="0.006" iyz="0" izz="0.006"/>
+</inertial>
 </link>
 <joint name="r_hip_yaw" type="revolute">
 <origin xyz="0 0 0.014400" rpy="-3.141593 0 0"/>
@@ -899,6 +1851,7 @@
 <parent link="r_hip_3"/>
 <child link="r_upper_leg"/>
 <limit effort="37.0" lower="-1.396263" upper="1.396263" velocity="7.64"/>
+<dynamics damping="0.15" friction="0.015"/>
 </joint>
 <link name="r_lower_leg">
 <visual>
@@ -908,6 +1861,16 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.043709 0.070100 0.386638" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<cylinder radius="0.03" length="0.25"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.5"/>
+<inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/>
+</inertial>
 </link>
 <joint name="r_knee" type="revolute">
 <origin xyz="0 0 -0.145825" rpy="0 0 0"/>
@@ -915,6 +1878,7 @@
 <parent link="r_upper_leg"/>
 <child link="r_lower_leg"/>
 <limit effort="37.0" lower="-2.164208" upper="0.069813" velocity="7.64"/>
+<dynamics damping="0.15" friction="0.015"/>
 </joint>
 <link name="r_ankle_1">
 <visual>
@@ -924,6 +1888,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.043709 0.070100 0.587138" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<sphere radius="0.03"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.3"/>
+<inertia ixx="0.003" ixy="0" ixz="0" iyy="0.003" iyz="0" izz="0.003"/>
+</inertial>
 </link>
 <joint name="r_ankle_pitch" type="revolute">
 <origin xyz="0 0 -0.200500" rpy="0 0 0"/>
@@ -931,6 +1905,7 @@
 <parent link="r_lower_leg"/>
 <child link="r_ankle_1"/>
 <limit effort="37.0" lower="-0.610865" upper="0.610865" velocity="7.64"/>
+<dynamics damping="0.12" friction="0.012"/>
 </joint>
 <link name="r_ankle_2">
 <visual>
@@ -940,6 +1915,16 @@
 </geometry>
 <material name="grey"/>
 </visual>
+<collision>
+<origin xyz="0.043788 0.070086 0.587138" rpy="1.5707963 0 1.5707963"/>
+<geometry>
+<sphere radius="0.028"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.25"/>
+<inertia ixx="0.0025" ixy="0" ixz="0" iyy="0.0025" iyz="0" izz="0.0025"/>
+</inertial>
 </link>
 <joint name="r_ankle_roll" type="revolute">
 <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -947,6 +1932,7 @@
 <parent link="r_ankle_1"/>
 <child link="r_ankle_2"/>
 <limit effort="37.0" lower="-0.436332" upper="0.436332" velocity="7.64"/>
+<dynamics damping="0.12" friction="0.012"/>
 </joint>
 <link name="r_foot">
 <visual>
@@ -956,13 +1942,28 @@
 </geometry>
 <material name="red"/>
 </visual>
+<collision>
+<origin xyz="0.047209 -0.070100 -0.647438" rpy="-1.5707963 0 -1.5707963"/>
+<geometry>
+<box size="0.1 0.08 0.02"/>
+</geometry>
+</collision>
+<inertial>
+<mass value="0.4"/>
+<inertia ixx="0.004" ixy="0" ixz="0" iyy="0.004" iyz="0" izz="0.004"/>
+</inertial>
 </link>
 <joint name="r_foot_ft_sensor" type="fixed">
 <origin xyz="-0.003500 0 -0.060500" rpy="3.141593 0 0"/>
 <parent link="r_ankle_2"/>
 <child link="r_foot"/>
 </joint>
-<link name="r_sole"/>
+<link name="r_sole">
+<inertial>
+<mass value="0.1"/>
+<inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+</inertial>
+</link>
 <joint name="r_sole_fixed_joint" type="fixed">
 <origin xyz="0.003500 0 0.004000" rpy="-3.141593 0 0"/>
 <parent link="r_foot"/>
