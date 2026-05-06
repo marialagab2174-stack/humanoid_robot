@@ -40,6 +40,7 @@ Le modèle définit une hiérarchie complexe respectant les standards de l'iCub 
     Torse : 3 degrés de liberté (Pitch, Roll, Yaw).
 
     Membres Supérieurs : Épaules, coudes et mains avec doigts détaillés (Index, Middle, Ring, Pinky, Thumb).
+    ![Aperçu du iCub](images/face.png)
 
     Membres Inférieurs : Hanches, genoux et chevilles équipés de capteurs de force/couple (FT sensors).
 
