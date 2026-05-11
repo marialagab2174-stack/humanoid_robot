@@ -20,6 +20,8 @@ source install/setup.bash
 
 
 🚀 Lancement de la Visualisation
+<img width="1855" height="1049" alt="face" src="https://github.com/user-attachments/assets/331004dd-00ab-493f-ace5-9060cbf74485" />
+
 
 Pour lancer le robot dans RViz avec le joint_state_publisher_gui (pour manipuler les membres) :
 ros2 launch humanoid_robot display.launch.py
@@ -42,7 +44,8 @@ Le modèle définit une hiérarchie complexe respectant les standards de l'iCub 
 
     Membres Supérieurs : Épaules, coudes et mains avec doigts détaillés (Index, Middle, Ring, Pinky, Thumb).
     ![Aperçu du iCub](images/face.png)
-
-    Membres Inférieurs : Hanches, genoux et chevilles équipés de capteurs de force/couple (FT sensors).
+   Membres Inférieurs : Hanches, genoux et chevilles équipés de capteurs de force/couple (FT sensors).
+   Amira, [May 11, 2026 at 21:52]
+This project was co-authored and implemented by the team: Amira Malak Daoui, Maria Lagab, and Romaissa Athmani.
 
     Matériaux : Définition des couleurs red, grey, white, dark, skin, et black.
