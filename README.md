@@ -20,7 +20,9 @@ source install/setup.bash
 
 
 🚀 Lancement de la Visualisation
-<img width="1855" height="1049" alt="face" src="https://github.com/user-attachments/assets/331004dd-00ab-493f-ace5-9060cbf74485" />
+<img width="1716" height="1061" alt="Capture d’écran du 2026-05-11 22-06-17" src="https://github.com/user-attachments/assets/f9e69cfa-8d1d-4bc7-aea8-cb93553bb28f" />
+<img width="1369" height="891" alt="Capture d’écran du 2026-05-11 22-08-27" src="https://github.com/user-attachments/assets/d67d1edf-5e82-4789-ab92-ec364cdb19e1" />
+
 
 
 Pour lancer le robot dans RViz avec le joint_state_publisher_gui (pour manipuler les membres) :
