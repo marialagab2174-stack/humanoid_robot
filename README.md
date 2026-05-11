@@ -37,9 +37,6 @@ Structure du Package
 
     launch/ : Scripts Python pour démarrer les nœuds robot_state_publisher et rviz2.
 
-⚙️ Détails Techniques (URDF)
-This project was co-authored and implemented by the team: Amira Malak Daoui, Maria Lagab
-
 Le modèle définit une hiérarchie complexe respectant les standards de l'iCub :
 
     Torse : 3 degrés de liberté (Pitch, Roll, Yaw).
@@ -48,11 +45,8 @@ Le modèle définit une hiérarchie complexe respectant les standards de l'iCub 
     ![Aperçu du iCub](images/face.png)
    Membres Inférieurs : Hanches, genoux et chevilles équipés de capteurs de force/couple (FT sensors).
 
-
-
-
-   
-   Amira, [May 11, 2026 at 21:52]
-This project was co-authored and implemented by the team: Amira Malak Daoui, Maria Lagab, and Romaissa Athmani.
+This project was co-authored and implemented by the team: LAGAB MARIA
+                                                        Amira Malak Daoui
+                                                       Romaissa Athmani.
 
     Matériaux : Définition des couleurs red, grey, white, dark, skin, et black.
