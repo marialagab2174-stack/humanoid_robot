@@ -34,6 +34,7 @@ Structure du Package
     launch/ : Scripts Python pour démarrer les nœuds robot_state_publisher et rviz2.
 
 ⚙️ Détails Techniques (URDF)
+This project was co-authored and implemented by the team: Amira Malak Daoui, Maria Lagab
 
 Le modèle définit une hiérarchie complexe respectant les standards de l'iCub :
 
